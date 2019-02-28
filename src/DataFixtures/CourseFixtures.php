@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Courses;
+use App\Entity\Section;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -21,6 +22,14 @@ class CourseFixtures extends Fixture
                  ->setTeachers($faker->name())
                  ->setDescription($faker->paragraph(4));
           $manager->persist($course);
+
+          for ($j = 0; $j <= mt_rand(2,5); $j++)
+          {
+              $section = new Section();
+              $section->setTitle($faker->sentence())
+                  ->setCours($course);
+              $manager->persist($section);
+          }
         }
         $manager->flush();
     }

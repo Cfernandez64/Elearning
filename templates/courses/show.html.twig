@@ -14,6 +14,12 @@
   <p>
     {{ cours.description }}
   </p>
+     {% for section in cours.sections %}
+       <div class="section mb-4 p-2 bg-light">
+         <p class="text-muted">Section {{ section.id }}</p>
+         <h5 class="mt-0">{{ section.title }}</h5>
+       </div>
+    {% endfor %}
 
 </article>
 

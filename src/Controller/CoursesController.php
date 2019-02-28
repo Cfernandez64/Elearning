@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CoursesRepository;
 use App\Entity\Courses;
+use App\Entity\Section;
 
 class CoursesController extends AbstractController
 {
@@ -22,7 +23,7 @@ class CoursesController extends AbstractController
     }
 
     /**
-     * @Route("/cours/{id}", name="cours_show")
+     * @Route("/cours/{id}", name="courses_show")
      **/
     public function show(Courses $courses)
     {
