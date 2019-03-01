@@ -18,6 +18,13 @@
        <div class="section mb-4 p-2 bg-light">
          <p class="text-muted">Section {{ section.id }}</p>
          <h5 class="mt-0">{{ section.title }}</h5>
+         <ul>
+         {% for contenu in section.contenus %}
+          <li>
+            {{ contenu.title }}
+          </li>
+         {% endfor %}
+         </ul>
        </div>
     {% endfor %}
 

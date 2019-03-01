@@ -44,9 +44,15 @@ class Courses
      */
     private $sections;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Contenu", mappedBy="cours")
+     */
+    private $contenus;
+
     public function __construct()
     {
         $this->sections = new ArrayCollection();
+        $this->contenus = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +134,34 @@ class Courses
             if ($section->getCours() === $this) {
                 $section->setCours(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contenu[]
+     */
+    public function getContenus(): Collection
+    {
+        return $this->contenus;
+    }
+
+    public function addContenus(Contenu $contenus): self
+    {
+        if (!$this->contenus->contains($contenus)) {
+            $this->contenus[] = $contenus;
+            $contenus->addCour($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContenus(Contenu $contenus): self
+    {
+        if ($this->contenus->contains($contenus)) {
+            $this->contenus->removeElement($contenus);
+            $contenus->removeCour($this);
         }
 
         return $this;

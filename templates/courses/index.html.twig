@@ -13,7 +13,7 @@
                 <h4 class="card-title">{{ cours.titre }}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">Intervenant : {{  cours.teachers }}</h6>
                 <p class="card-text"><small>Durée du cours : {{ cours.duration }}</small></p>
-                <a href="#" class="card-link">Card link</a>
+                <a class="card-link" href="{{ path('courses_show', {'id':cours.id}) }}">Lire la suite</a>
                 <a href="#" class="card-link">Another link</a>
             </div>
         </div>

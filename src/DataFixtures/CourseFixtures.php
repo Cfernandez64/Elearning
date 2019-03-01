@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Courses;
 use App\Entity\Section;
+use App\Entity\Contenu;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -29,6 +30,16 @@ class CourseFixtures extends Fixture
               $section->setTitle($faker->sentence())
                   ->setCours($course);
               $manager->persist($section);
+
+              for ($k = 0; $k <= mt_rand(2,4); $k++)
+              {
+                  $contenu = new Contenu();
+                  $contenu->setTitle($faker->sentence())
+                          ->setContent($faker->realText(1500))
+                          ->setSection($section)
+                          ->addCour($course);
+                  $manager->persist($contenu);
+              }
           }
         }
         $manager->flush();

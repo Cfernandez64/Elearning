@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,16 @@ class Section
      * @ORM\Column(type="integer")
      */
     private $progression = 0;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Contenu", mappedBy="section", orphanRemoval=true)
+     */
+    private $contenus;
+
+    public function __construct()
+    {
+        $this->contenus = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +81,37 @@ class Section
     public function setProgression(int $progression): self
     {
         $this->progression = $progression;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contenu[]
+     */
+    public function getContenus(): Collection
+    {
+        return $this->contenus;
+    }
+
+    public function addContenus(Contenu $contenus): self
+    {
+        if (!$this->contenus->contains($contenus)) {
+            $this->contenus[] = $contenus;
+            $contenus->setSection($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContenus(Contenu $contenus): self
+    {
+        if ($this->contenus->contains($contenus)) {
+            $this->contenus->removeElement($contenus);
+            // set the owning side to null (unless already changed)
+            if ($contenus->getSection() === $this) {
+                $contenus->setSection(null);
+            }
+        }
 
         return $this;
     }
