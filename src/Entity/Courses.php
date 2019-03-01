@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CoursesRepository")
@@ -40,19 +41,16 @@ class Courses
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Section", mappedBy="cours", orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\Contenu", mappedBy="relCours")
      */
-    private $sections;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Contenu", mappedBy="cours")
-     */
-    private $contenus;
+    private $relContents;
 
     public function __construct()
     {
-        $this->sections = new ArrayCollection();
-        $this->contenus = new ArrayCollection();
+         $this->contenus = new ArrayCollection();
+         $this->contents = new ArrayCollection();
+         $this->relContenus = new ArrayCollection();
+         $this->relContents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,59 +107,28 @@ class Courses
     }
 
     /**
-     * @return Collection|Section[]
-     */
-    public function getSections(): Collection
-    {
-        return $this->sections;
-    }
-
-    public function addSection(Section $section): self
-    {
-        if (!$this->sections->contains($section)) {
-            $this->sections[] = $section;
-            $section->setCours($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSection(Section $section): self
-    {
-        if ($this->sections->contains($section)) {
-            $this->sections->removeElement($section);
-            // set the owning side to null (unless already changed)
-            if ($section->getCours() === $this) {
-                $section->setCours(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Contenu[]
      */
-    public function getContenus(): Collection
+    public function getRelContents(): Collection
     {
-        return $this->contenus;
+        return $this->relContents;
     }
 
-    public function addContenus(Contenu $contenus): self
+    public function addRelContent(Contenu $relContent): self
     {
-        if (!$this->contenus->contains($contenus)) {
-            $this->contenus[] = $contenus;
-            $contenus->addCour($this);
+        if (!$this->relContents->contains($relContent)) {
+            $this->relContents[] = $relContent;
+            $relContent->addRelCour($this);
         }
 
         return $this;
     }
 
-    public function removeContenus(Contenu $contenus): self
+    public function removeRelContent(Contenu $relContent): self
     {
-        if ($this->contenus->contains($contenus)) {
-            $this->contenus->removeElement($contenus);
-            $contenus->removeCour($this);
+        if ($this->relContents->contains($relContent)) {
+            $this->relContents->removeElement($relContent);
+            $relContent->removeRelCour($this);
         }
 
         return $this;

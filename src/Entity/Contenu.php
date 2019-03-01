@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ContenuRepository")
@@ -29,19 +31,21 @@ class Contenu
     private $content;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Section", inversedBy="contenus")
-     * @ORM\JoinColumn(nullable=false)
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(type="string", length=128, unique=true)
      */
-    private $section;
+    private $slug;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Courses", inversedBy="contenus")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Courses", inversedBy="relContents")
      */
-    private $cours;
+    private $relCours;
+
 
     public function __construct()
     {
         $this->cours = new ArrayCollection();
+        $this->relCours = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,14 +77,14 @@ class Contenu
         return $this;
     }
 
-    public function getSection(): ?Section
+    public function getSlug(): ?string
     {
-        return $this->section;
+        return $this->slug;
     }
 
-    public function setSection(?Section $section): self
+    public function setSlug(string $slug): self
     {
-        $this->section = $section;
+        $this->slug = $slug;
 
         return $this;
     }
@@ -88,26 +92,27 @@ class Contenu
     /**
      * @return Collection|Courses[]
      */
-    public function getCours(): Collection
+    public function getRelCours(): Collection
     {
-        return $this->cours;
+        return $this->relCours;
     }
 
-    public function addCour(Courses $cour): self
+    public function addRelCour(Courses $relCour): self
     {
-        if (!$this->cours->contains($cour)) {
-            $this->cours[] = $cour;
+        if (!$this->relCours->contains($relCour)) {
+            $this->relCours[] = $relCour;
         }
 
         return $this;
     }
 
-    public function removeCour(Courses $cour): self
+    public function removeRelCour(Courses $relCour): self
     {
-        if ($this->cours->contains($cour)) {
-            $this->cours->removeElement($cour);
+        if ($this->relCours->contains($relCour)) {
+            $this->relCours->removeElement($relCour);
         }
 
         return $this;
     }
+
 }

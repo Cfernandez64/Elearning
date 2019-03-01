@@ -14,19 +14,15 @@
   <p>
     {{ cours.description }}
   </p>
-     {% for section in cours.sections %}
-       <div class="section mb-4 p-2 bg-light">
-         <p class="text-muted">Section {{ section.id }}</p>
-         <h5 class="mt-0">{{ section.title }}</h5>
-         <ul>
-         {% for contenu in section.contenus %}
+        <div class="section mb-4 p-2 bg-light">
+          <ul>
+        {% for relContent in cours.relContents %}
           <li>
-            {{ contenu.title }}
+             <a href="{{ path('contenus_learn', {'courses_id':cours.id,'contenu_id':relContent.id,'slug':relContent.slug}) }}">{{ relContent.title }}</a>
           </li>
-         {% endfor %}
+        {% endfor %}
          </ul>
        </div>
-    {% endfor %}
 
 </article>
 
