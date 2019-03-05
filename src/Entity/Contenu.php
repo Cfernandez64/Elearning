@@ -37,9 +37,14 @@ class Contenu
     private $slug;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Courses", inversedBy="relContents")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Cour", inversedBy="relContents")
      */
     private $relCours;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
 
 
     public function __construct()
@@ -90,27 +95,41 @@ class Contenu
     }
 
     /**
-     * @return Collection|Courses[]
+     * @return Collection|Cour[]
      */
     public function getRelCours(): Collection
     {
         return $this->relCours;
     }
 
-    public function addRelCour(Courses $relCour): self
+    public function addRelCour(Cour $relCour): self
     {
+
         if (!$this->relCours->contains($relCour)) {
             $this->relCours[] = $relCour;
+            $relCour->addRelContent($this);
+        }
+
+         return $this;
+    }
+
+    public function removeRelCour(Cour $relCour): self
+    {
+        if ($this->relCours->contains($relCour)) {
+            $this->relCours->removeElement($relCour);
         }
 
         return $this;
     }
 
-    public function removeRelCour(Courses $relCour): self
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        if ($this->relCours->contains($relCour)) {
-            $this->relCours->removeElement($relCour);
-        }
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

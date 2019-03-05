@@ -9,9 +9,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CoursesRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CourRepository")
  */
-class Courses
+class Cour
 {
     /**
      * @ORM\Id()
@@ -44,6 +44,11 @@ class Courses
      * @ORM\ManyToMany(targetEntity="App\Entity\Contenu", mappedBy="relCours")
      */
     private $relContents;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $progres = 0;
 
     public function __construct()
     {
@@ -121,6 +126,7 @@ class Courses
             $relContent->addRelCour($this);
         }
 
+
         return $this;
     }
 
@@ -130,6 +136,18 @@ class Courses
             $this->relContents->removeElement($relContent);
             $relContent->removeRelCour($this);
         }
+
+        return $this;
+    }
+
+    public function getProgres(): ?int
+    {
+        return $this->progres;
+    }
+
+    public function setProgres(int $progres): self
+    {
+        $this->progres = $progres;
 
         return $this;
     }

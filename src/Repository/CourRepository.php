@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\Courses;
+use App\Entity\Cour;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Courses|null find($id, $lockMode = null, $lockVersion = null)
- * @method Courses|null findOneBy(array $criteria, array $orderBy = null)
- * @method Courses[]    findAll()
- * @method Courses[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Cour|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Cour|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Cour[]    findAll()
+ * @method Cour[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CoursesRepository extends ServiceEntityRepository
+class CourRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Courses::class);
+        parent::__construct($registry, Cour::class);
     }
 
     // /**
