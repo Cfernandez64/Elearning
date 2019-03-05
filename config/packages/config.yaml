@@ -1,0 +1,4 @@
+kms_froala_editor:
+
+  language: "fr"
+  imageUploadFolder: "web/upload"

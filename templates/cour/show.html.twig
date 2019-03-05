@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<article class="cours mt-5">
+  
+  <h2>{{ cour.titre }}</h2>
+  <h6>{{ cour.teachers }}</h6>
+  <hr>
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="{{ cour.progres }}" aria-valuemin="0" aria-valuemax="100">25%</div>
+    </div>
+  <p class="mt-5">
+    <strong>
+      Description du cours
+    </strong>
+  </p>
+  <p>
+    {{ cour.description }}
+  </p>
+        <div class="section mb-4 p-2 bg-light">
+          <ul>
+        {% for relContent in cour.relContents %}
+          <li>
+             <a href="{{ path('contenus_learn', {'cour_id':cour.id,'contenu_id':relContent.id,'slug':relContent.slug}) }}">{{ relContent.title }}</a>
+          </li>
+        {% endfor %}
+         </ul>
+       </div>
+
+</article>
+
+{% endblock %}
