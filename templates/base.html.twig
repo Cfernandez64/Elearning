@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}E-learning Bleu Social{% endblock %}</title>
-
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <link rel="stylesheet"
   href="https://bootswatch.com/4/flatly/bootstrap.min.css">
   {% block stylesheet %}{% endblock %}
@@ -22,7 +23,7 @@
         <a class="nav-link" href="{{ path('home') }}">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ path('cours') }}">Tous les cours</a>
+        <a class="nav-link" href="{{ path('lesson') }}">Tous les cours</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
