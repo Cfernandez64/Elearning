@@ -3,7 +3,7 @@
 {% block body %}
 <article class="cours mt-5">
   
-  <h2>{{ lesson.title }}</h2>
+  <h2 class="title">{{ lesson.title }}</h2>
   <h6>{{ lesson.teacher }}</h6>
   <hr>
     <div class="progress">
@@ -22,20 +22,52 @@
           <ul id="sortable" class="list-group">
         {% for content in lesson.contents %}
           <li class="ui-state-default list-group-item d-flex justify-content-between align-items-center contenu">
-             <a href="{{ path('content_learn', {'lesson_id':lesson.id, 'content_id':content.id, 'slug':content.slug}) }}">{{ lesson.title }}</a>
+             <a href="{{ path('content_learn', {'lesson_id':lesson.id, 'content_id':content.id, 'slug':content.slug}) }}">{{ content.title }}</a>
+              <a class="ordre">Modifier l'ordre</a>
+              <div>
+                  <form method="post" id="" action="content-rank/new">
+                      <input type="number" id="rank" class="form-control" value="{{ loop.index }}"/>
+                      <input type="text" id="lesson" class="form-control" value="{{ lesson.title }}"/>
+                      <input type="text" id="content" class="form-control" value="{{ content.title }}"/>
+                      <button class="btn btn-primary">Valider</button>
+                  </form>
+              </div>
           </li>
             {% endfor %}
          </ul>
+
             <script>
                 $(document).ready(function(){
                     $( function() {
                         $( "#sortable" ).sortable();
                         $( "#sortable" ).disableSelection();
                     } );
+
+                    $('.ordre').click(function(){
+                        $(this).next().toggle();
+                    });
+
+                    $('.signal').click(function(){
+                        var id = $(this).attr('id');
+                        $.ajax({
+                            url: id,
+                            type: 'POST',
+                            success: function(response){
+                                $('#successModal').modal('show');
+                            },
+                            error : function (response){
+                                $('#failModal').modal('show');
+                            }
+                        });
+                    });
                 });
             </script>
 
        </div>
+
+
+
+
 
 </article>
 

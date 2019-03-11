@@ -4,25 +4,25 @@
 <article class="cours mt-5">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">Home</a></li>
-    <li class="breadcrumb-item"><a href="{{ path('cour_show', {'id':cour.id}) }}">{{ cour.titre }}</a></li>
-    <li class="breadcrumb-item active">{{ content.title }}</li>
+    <li class="breadcrumb-item"><a href="{{ path('cour_show', {'id':cour.id}) }}">{{ cour.title }}</a></li>
+    <li class="breadcrumb-item active">{{ contenu.title }}</li>
   </ol>
 
 
   <div class="container mt-4">
-    <h3>{{ content.title }}</h3>
+    <h3>{{ contenu.title }}</h3>
     <div class="row justify-content-between mt-4">
       <div class="col-md-4 px-3">
         <div class="list-group">
-          {% for content in cour.relContents %}
+          {% for contenu in cour.contenus %}
             <a href="#" class="list-group-item list-group-item-action">
-              {{ content.title }}
+              {{ contenu.title }}
             </a>
           {% endfor %}
         </div>
       </div>
       <div class="mb-4 col-md-8">
-        {{ content.content | raw }}
+        {{ contenu.content | raw }}
       </div>
     </div>
   </div>

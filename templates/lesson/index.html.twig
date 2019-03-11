@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des cours{% endblock %}
+
+{% block body %}
+
+    <div class="example-wrapper">
+        <h1>Liste des cours</h1>
+
+        {% for unique in lesson %}
+            <div class="card mt-3" id="cour-{{ unique.id }}">
+                <div class="card-body">
+                    <h4 class="card-title">{{ unique.title }}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">Intervenant : {{ unique.teacher }}</h6>
+                    <p class="card-text"><small>Durée du cours : {{ unique.duration }}</small></p>
+                    <a class="card-link" href="{{ path('lesson_show', {'id':unique.id}) }}">Lire la suite</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

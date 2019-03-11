@@ -3,11 +3,11 @@
 {% block body %}
 <article class="cours mt-5">
   
-  <h2>{{ cour.titre }}</h2>
-  <h6>{{ cour.teachers }}</h6>
+  <h2>{{ cour.title }}</h2>
+  <h6>{{ cour.teacher }}</h6>
   <hr>
     <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="{{ cour.progres }}" aria-valuemin="0" aria-valuemax="100">25%</div>
+        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
     </div>
   <p class="mt-5">
     <strong>
@@ -17,14 +17,24 @@
   <p>
     {{ cour.description }}
   </p>
-        <div class="section mb-4 p-2 bg-light">
-          <ul>
-        {% for relContent in cour.relContents %}
-          <li>
-             <a href="{{ path('contenus_learn', {'cour_id':cour.id,'contenu_id':relContent.id,'slug':relContent.slug}) }}">{{ relContent.title }}</a>
+        <div class="section mb-4 p-2">
+            <p class="font-weight-bolder">Sections relatives au cours :</p>
+          <ul id="sortable" class="list-group">
+        {% for content in cour.contenus %}
+          <li class="ui-state-default list-group-item d-flex justify-content-between align-items-center contenu">
+              <a href="{{ path('contenu_learn', {cour_id:cour.id, contenu_id:content.id, 'slug':content.slug}) }}">{{ content.title }}</a>
           </li>
-        {% endfor %}
+            {% endfor %}
          </ul>
+            <script>
+                $(document).ready(function(){
+                    $( function() {
+                        $( "#sortable" ).sortable();
+                        $( "#sortable" ).disableSelection();
+                    } );
+                });
+            </script>
+
        </div>
 
 </article>

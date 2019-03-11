@@ -2,18 +2,17 @@
 
 namespace App\Form;
 
-use App\Entity\Content;
-use App\Entity\Lesson;
-use App\Entity\LessonsContents;
+use App\Entity\Contenu;
+use App\Entity\Cour;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use KMS\FroalaEditorBundle\Form\Type\FroalaEditorType; // Symfony 4
+use KMS\FroalaEditorBundle\Form\Type\FroalaEditorType;
 
-class ContentType extends AbstractType
+class ContenuType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -21,10 +20,10 @@ class ContentType extends AbstractType
             ->add('title')
             ->add('content')
             ->add('slug')
-            ->add('inLessons', EntityType ::class, [
-                'class' => Lesson::class,
+            ->add('inCour', EntityType ::class, [
+                'class' => Cour::class,
                 'choice_label'  => 'title',
-                'multiple'  => true,
+                'multiple'  => false,
                 'by_reference' => false
             ])
         ;
@@ -33,7 +32,7 @@ class ContentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Content::class,
+            'data_class' => Contenu::class,
         ]);
     }
 }
