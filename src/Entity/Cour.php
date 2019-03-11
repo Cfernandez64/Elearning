@@ -45,6 +45,7 @@ class Cour
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Contenu", mappedBy="inCour", orphanRemoval=true)
+     * @ORM\OrderBy({"rank" = "ASC"})
      */
     private $contenus;
 

@@ -17,21 +17,70 @@
   <p>
     {{ cour.description }}
   </p>
+    <style>
+        .ui-state-highlight { list-style-type:none; height: 3em; line-height: 1.2em; background:#f8f8f8;}
+        .buttonOrder{display:none;}
+    </style>
         <div class="section mb-4 p-2">
             <p class="font-weight-bolder">Sections relatives au cours :</p>
-          <ul id="sortable" class="list-group">
+          <ul id="sortable" class="list-group mb-5">
         {% for content in cour.contenus %}
           <li class="ui-state-default list-group-item d-flex justify-content-between align-items-center contenu">
               <a href="{{ path('contenu_learn', {cour_id:cour.id, contenu_id:content.id, 'slug':content.slug}) }}">{{ content.title }}</a>
+              <form method="POST" class="ranker" name="ranker" action="">
+                  <input type="hidden" name="rank" class="rank rank-{{ loop.index0 }}" value="">
+                  <input type="hidden" name="cour_id" class="cour_id_{{ loop.index0 }}" value="{{ cour.id }}"/>
+                  <input type="hidden" class="index-{{ loop.index0 }}" value="{{ content.id }}"/>
+              </form>
           </li>
             {% endfor %}
          </ul>
+            <div class="text-right">
+                <p class="order text-right"><a>Modifier l'ordre des cours</a></p>
+                <p><small class="buttonOrder">Déplacez les contenus vers le haut ou le bas pour les réordonner</small></p>
+                <button class="buttonOrder btn btn-primary validate">Valider les changements</button>
+                <p class="mt-3 success"></p>
+            </div>
+
+
             <script>
                 $(document).ready(function(){
-                    $( function() {
-                        $( "#sortable" ).sortable();
+                    $('.order').click(function(){
+                        $(this).toggle();
+                        $('.buttonOrder').toggle();
+                        $( "#sortable" ).sortable({
+                            placeholder: "ui-state-highlight"
+                        });
                         $( "#sortable" ).disableSelection();
-                    } );
+                    });
+
+
+
+
+                    $('.validate').click(function(){
+                        $('.order').toggle();
+                        $('.buttonOrder').toggle();
+                        var li = $('#sortable li');
+                        li.each(function(){
+                            var liDex = $(this).index();
+                            $(this).find('.rank').val(liDex + 1);
+                        });
+                        var forms = $('.ranker');
+                        forms.each(function(index){
+                            var id = $('.index-' + index).val();
+                            $.ajax({
+                                url: "contenu-"+id+"/update-rank",
+                                type: 'POST',
+                                data: {rank: $('.rank-'+index).val(), cour_id: $('.cour_id_'+index).val()},
+                                success: function(response){
+                                    $('.success').html("<span class='badge badge-pill badge-success'>Succès</span> L'ordre des contenus est à jour");
+                                },
+                                error : function (response){
+                                    $('.success').html("<span class='badge badge-pill badge-warning'>Warning</span> Une erreur s'est produite, veuillez réessayer.");;
+                                }
+                            });
+                        });
+                    });
                 });
             </script>
 

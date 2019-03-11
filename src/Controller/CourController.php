@@ -99,6 +99,28 @@ class CourController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/cour/contenu-{contenu_id}/update-rank", name="update_rank")
+     **/
+    public function updateRank($contenu_id, Request $request)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $contenu = $entityManager->getRepository(Contenu::class)->find($contenu_id);
+
+        if(!$contenu)
+        {
+            throw $this->createNotFoundException(
+                'Désolé action impossible'
+            );
+        }
+        $rank = $_POST['rank'];
+
+        $contenu->setRank($rank);
+        $entityManager->flush();
+        $cour_id = $_POST['cour_id'];
+        return $this->redirectToRoute('cour_show', ['id' => $cour_id]);
+    }
+
 
     /**
      * @Route("/cour/{id}", name="cour_show")

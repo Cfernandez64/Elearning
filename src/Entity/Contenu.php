@@ -22,7 +22,7 @@ class Contenu
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $content;
 
@@ -42,6 +42,11 @@ class Contenu
      */
     private $inCour;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $rank = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,12 +64,12 @@ class Contenu
         return $this;
     }
 
-    public function getContent(): ?string
+    public function getContent(): ?text
     {
         return $this->content;
     }
 
-    public function setContent(string $content): self
+    public function setContent(text $content): self
     {
         $this->content = $content;
 
@@ -103,6 +108,18 @@ class Contenu
     public function setInCour(?Cour $inCour): self
     {
         $this->inCour = $inCour;
+
+        return $this;
+    }
+
+    public function getRank(): ?int
+    {
+        return $this->rank;
+    }
+
+    public function setRank(int $rank): self
+    {
+        $this->rank = $rank;
 
         return $this;
     }
