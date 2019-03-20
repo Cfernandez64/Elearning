@@ -28,6 +28,11 @@ class Stagiaire extends User
      */
     private $user;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Advance", mappedBy="stagiaire", cascade={"persist", "remove"})
+     */
+    private $advance;
+
 
     public function getId(): ?int
     {
@@ -54,6 +59,23 @@ class Stagiaire extends User
     public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAdvance(): ?Advance
+    {
+        return $this->advance;
+    }
+
+    public function setAdvance(Advance $advance): self
+    {
+        $this->advance = $advance;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $advance->getStagiaire()) {
+            $advance->setStagiaire($this);
+        }
 
         return $this;
     }

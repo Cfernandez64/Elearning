@@ -47,6 +47,11 @@ class Contenu
      */
     private $rank = 0;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Advance", inversedBy="contenu")
+     */
+    private $advance;
+
      public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +125,18 @@ class Contenu
     public function setRank(int $rank): self
     {
         $this->rank = $rank;
+
+        return $this;
+    }
+
+    public function getAdvance(): ?Advance
+    {
+        return $this->advance;
+    }
+
+    public function setAdvance(?Advance $advance): self
+    {
+        $this->advance = $advance;
 
         return $this;
     }
