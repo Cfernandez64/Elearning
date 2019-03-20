@@ -8,7 +8,7 @@ use App\Entity\User;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StagiaireRepository")
  */
-class Stagiaire extends User
+class Stagiaire
 {
     /**
      * @ORM\Id()
@@ -16,11 +16,6 @@ class Stagiaire extends User
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $Adresse;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", cascade={"persist", "remove"})
@@ -33,22 +28,15 @@ class Stagiaire extends User
      */
     private $advance;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Inscription", mappedBy="stagiaire", cascade={"persist", "remove"})
+     */
+    private $inscription;
+
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getAdresse(): ?string
-    {
-        return $this->Adresse;
-    }
-
-    public function setAdresse(?string $Adresse): self
-    {
-        $this->Adresse = $Adresse;
-
-        return $this;
     }
 
     public function getUser(): ?User
@@ -75,6 +63,23 @@ class Stagiaire extends User
         // set the owning side of the relation if necessary
         if ($this !== $advance->getStagiaire()) {
             $advance->setStagiaire($this);
+        }
+
+        return $this;
+    }
+
+    public function getInscription(): ?Inscription
+    {
+        return $this->inscription;
+    }
+
+    public function setInscription(Inscription $inscription): self
+    {
+        $this->inscription = $inscription;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $inscription->getStagiaire()) {
+            $inscription->setStagiaire($this);
         }
 
         return $this;

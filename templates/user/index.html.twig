@@ -20,10 +20,11 @@
                         <td>{{ user.lastname }}</td>
                         <td>{{ user.firstname }}</td>
                         <td>{{ user.roles[0] }}</td>
-                        <td>+</td>
+                        <td><a class="btn btn-info" href="{{ path('user_show', {id:user.id}) }}">Voir</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <p class="mt-4"><a class="btn btn-danger" href="{{ path('user_create')}}">Ajouter un utilisateur</a></p>
     </section>
 {% endblock %}
