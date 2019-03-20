@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Form\RegistrationType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -46,6 +47,35 @@ class SecurityController extends AbstractController
     {
         return $this->render('security/login.html.twig', [
 
+        ]);
+    }
+
+    /**
+     * @Route("/deconnexion", name="security_logout")
+     */
+    public function logout(){}
+
+
+    /**
+     * @Route("/users", name="user")
+     */
+    public function index(UserRepository $repo)
+    {
+        $users = $repo->findAll();
+
+        return $this->render('user/index.html.twig', [
+            'controller_name' => 'SecurityController',
+            'users'        => $users
+        ]);
+    }
+
+    /**
+     * @Route("/users/{id}", name="user_show")
+     */
+    public function show(User $user)
+    {
+        return $this->render('user/show.html.twig', [
+            'user'        => $user
         ]);
     }
 }

@@ -47,7 +47,7 @@ class Contenu
      */
     private $rank = 0;
 
-    public function getId(): ?int
+     public function getId(): ?int
     {
         return $this->id;
     }
@@ -64,12 +64,12 @@ class Contenu
         return $this;
     }
 
-    public function getContent(): ?text
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    public function setContent(text $content): self
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -123,5 +123,6 @@ class Contenu
 
         return $this;
     }
+
 
 }

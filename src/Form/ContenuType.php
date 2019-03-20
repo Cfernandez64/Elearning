@@ -4,7 +4,10 @@ namespace App\Form;
 
 use App\Entity\Contenu;
 use App\Entity\Cour;
+use App\Entity\LessonsContents;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface;
@@ -19,13 +22,15 @@ class ContenuType extends AbstractType
         $builder
             ->add('title')
             ->add('content')
-            ->add('slug')
+            ->add('slug', TextType::class,['required' => false
+            ])
             ->add('inCour', EntityType ::class, [
                 'class' => Cour::class,
                 'choice_label'  => 'title',
                 'multiple'  => false,
                 'by_reference' => false
             ])
+
         ;
     }
 
