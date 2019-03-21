@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}titre{% endblock %}
+
+{% block body %}
+
+    {% for content in contenu %}
+    {{ content.id }}
+    {% endfor %}
+{% endblock %}

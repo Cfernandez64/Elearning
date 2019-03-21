@@ -22,7 +22,7 @@ class AdvanceRepository extends ServiceEntityRepository
     // /**
     //  * @return Advance[] Returns an array of Advance objects
     //  */
-    /*
+
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('a')
@@ -34,7 +34,7 @@ class AdvanceRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Advance

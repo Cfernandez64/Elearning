@@ -45,4 +45,4 @@ security:
 
 
     access_control:
-    - { path: ^/blog, roles: ROLE_ADMIN }
+    - { path: ^/admin, roles: ROLE_ADMIN }

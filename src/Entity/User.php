@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -59,6 +61,21 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstname;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Advance", mappedBy="user", orphanRemoval=true)
+     */
+    private $advances;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Cour", inversedBy="users")
+     */
+    private $inCour;
+
+    public function __construct()
+    {
+        $this->advances = new ArrayCollection();
+    }
 
      public function getId(): ?int
     {
@@ -146,6 +163,49 @@ class User implements UserInterface
     public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Advance[]
+     */
+    public function getAdvances(): Collection
+    {
+        return $this->advances;
+    }
+
+    public function addAdvance(Advance $advance): self
+    {
+        if (!$this->advances->contains($advance)) {
+            $this->advances[] = $advance;
+            $advance->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdvance(Advance $advance): self
+    {
+        if ($this->advances->contains($advance)) {
+            $this->advances->removeElement($advance);
+            // set the owning side to null (unless already changed)
+            if ($advance->getUser() === $this) {
+                $advance->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInCour(): ?Cour
+    {
+        return $this->inCour;
+    }
+
+    public function setInCour(?Cour $inCour): self
+    {
+        $this->inCour = $inCour;
 
         return $this;
     }

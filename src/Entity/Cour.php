@@ -49,9 +49,15 @@ class Cour
      */
     private $contenus;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="inCour")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->contenus = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +134,13 @@ class Cour
         return $this->contenus;
     }
 
+    public function setContenus(?Cour $cour)
+    {
+        $this->cour = $cour;
+
+        return $this;
+    }
+
     public function addContenu(Contenu $contenus): self
     {
         if (!$this->contenus->contains($contenus)) {
@@ -145,6 +158,37 @@ class Cour
             // set the owning side to null (unless already changed)
             if ($contenus->getInCour() === $this) {
                 $contenus->setInCour(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setInCour($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getInCour() === $this) {
+                $user->setInCour(null);
             }
         }
 

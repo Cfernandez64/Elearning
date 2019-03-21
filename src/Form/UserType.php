@@ -3,6 +3,9 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Cour;
+use App\Entity\Advance;
+use App\Form\AdvanceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -29,6 +32,10 @@ class UserType extends AbstractType
                 ],
                 'expanded'  => false, // liste déroulante
                 'multiple'  => true, // choix multiple
+            ])
+            ->add('inCour', EntityType ::class, [
+                'class' => Cour::class,
+                'choice_label'  => 'title'
             ])
             ->add('lastname')
             ->add('firstname')

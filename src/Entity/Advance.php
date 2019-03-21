@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,23 +19,19 @@ class Advance
     /**
      * @ORM\Column(type="integer")
      */
-    private $percentage;
+    private $percentage = 0;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Stagiaire", inversedBy="advance", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="advances")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $stagiaire;
+    private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contenu", mappedBy="advance")
+     * @ORM\Column(type="integer")
      */
-    private $contenu;
+    private $contenu_id;
 
-    public function __construct()
-    {
-        $this->contenu = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -56,46 +50,29 @@ class Advance
         return $this;
     }
 
-    public function getStagiaire(): ?Stagiaire
+    public function getUser(): ?User
     {
-        return $this->stagiaire;
+        return $this->user;
     }
 
-    public function setStagiaire(Stagiaire $stagiaire): self
+    public function setUser(?User $user): self
     {
-        $this->stagiaire = $stagiaire;
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Contenu[]
-     */
-    public function getContenu(): Collection
+    public function getContenuId(): ?int
     {
-        return $this->contenu;
+        return $this->contenu_id;
     }
 
-    public function addContenu(Contenu $contenu): self
+    public function setContenuId(int $contenu_id): self
     {
-        if (!$this->contenu->contains($contenu)) {
-            $this->contenu[] = $contenu;
-            $contenu->setAdvance($this);
-        }
+        $this->contenu_id = $contenu_id;
 
         return $this;
     }
 
-    public function removeContenu(Contenu $contenu): self
-    {
-        if ($this->contenu->contains($contenu)) {
-            $this->contenu->removeElement($contenu);
-            // set the owning side to null (unless already changed)
-            if ($contenu->getAdvance() === $this) {
-                $contenu->setAdvance(null);
-            }
-        }
 
-        return $this;
-    }
 }

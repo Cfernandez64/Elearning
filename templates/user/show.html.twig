@@ -21,6 +21,22 @@
                     </tr>
             </tbody>
         </table>
+        <div>
+            Inscrit au cours : {{ user.inCour.title }}
+        </div>
+        <div>
+            <ul>
+                {% for contenu in contenus %}
+                    <li>
+                        {{ contenu.title }}
+                    </li>
+                {% endfor %}
+                Liste des progrès à relier aux contenus
+                {% for prog in progres %}
+                    {{ prog.percentage }}
+                {% endfor %}
+            </ul>
+        </div>
         <p class="mt-4"><a href="{{ path('user_edit', {'id':user.id}) }}" class="btn btn-primary">Modifier cet utilisateur</a></p>
     </section>
 {% endblock %}

@@ -57,61 +57,7 @@ class SecurityController extends AbstractController
     public function logout(){}
 
 
-    /**
-     * @Route("/users/new", name="user_create")
-     * @ROUTE("/users/{id}/edit", name="user_edit")
-     */
-    public function formUser(User $user = null, UserRepository $repo, Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder)
-    {
-        if(!$user)
-        {
-            $user = new User();
-        }
 
-        $form = $this->createForm(UserType ::class, $user);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $hash = $encoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($hash);
-            $manager->persist($user);
-            $manager->flush();
-
-            return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
-        }
-
-        return $this->render('user/edit.html.twig', [
-            'formUser' => $form->createView(),
-            'editMode'  => $user->getId() !== null,
-            'user'        => $user
-        ]);
-    }
-
-
-    /**
-     * @Route("/users", name="user")
-     */
-    public function index(UserRepository $repo)
-    {
-        $users = $repo->findAll();
-
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'SecurityController',
-            'users'        => $users
-        ]);
-    }
-
-    /**
-     * @Route("/users/{id}", name="user_show")
-     */
-    public function show(User $user)
-    {
-        return $this->render('user/show.html.twig', [
-            'user'        => $user
-        ]);
-    }
 
 
 }
