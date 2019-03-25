@@ -135,21 +135,29 @@ class UserController extends AbstractController
      */
     public function show(User $user, LessonRepository $repo, LessonContent $lessonContent = null, LessonContentRepository $repos, AdvanceRepository $repoad)
     {
-        $isLesson = $user->getInLesson()->getId();
-        $lesson = $repo->findOneBy(array('id' => $isLesson));
-        $contents = $repos->findBy(array('lesson' => $lesson));
-
-        foreach($contents as $content)
+        if($user->getInLesson())
         {
+            $isLesson = $user->getInLesson()->getId();
+            $lesson = $repo->findOneBy(array('id' => $isLesson));
+            $contents = $repos->findBy(array('lesson' => $lesson));
 
-            $progres = $repoad->findBy(array('user' => $user->getId()));
+            foreach($contents as $content)
+            {
+
+                $progres = $repoad->findBy(array('user' => $user->getId()));
+            }
+
+            return $this->render('user/show.html.twig', [
+                'user' => $user,
+                'contents' => $contents,
+                'progres' => $progres
+            ]);
+        } else {
+            return $this->render('user/show.html.twig', [
+                'user' => $user
+            ]);
         }
 
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
-            'contents' => $contents,
-            'progres' => $progres
-        ]);
     }
 
 

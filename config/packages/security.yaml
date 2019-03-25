@@ -24,7 +24,7 @@ security:
 
             logout:
                 path: security_logout
-                target: blog
+                target: lesson
 
         admin_area:
             pattern:    ^/admin

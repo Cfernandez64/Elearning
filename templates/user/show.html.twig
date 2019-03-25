@@ -21,6 +21,7 @@
                     </tr>
             </tbody>
         </table>
+        {% if contents is defined %}
         <div>
             <h4 class="mt-4">Inscrit au cours : {{ user.inLesson.title }}</h4>
         </div>
@@ -31,9 +32,9 @@
                         {{ content.content.title }}
                         {% for prog in progres %}
                             {% if content.content.id == prog.content.id %}
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" style="width: {{ prog.percentage }}%;" aria-valuenow="{{ prog.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ prog.percentage }}%</div>
-                        </div>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ prog.percentage }}%;" aria-valuenow="{{ prog.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ prog.percentage }}%</div>
+                                </div>
                             {% endif %}
                         {% endfor %}
 
@@ -44,6 +45,7 @@
 
             </ul>
         </div>
+        {% endif %}
         <p class="mt-4"><a href="{{ path('user_edit', {'id':user.id}) }}" class="btn btn-primary">Modifier cet utilisateur</a></p>
     </section>
 {% endblock %}

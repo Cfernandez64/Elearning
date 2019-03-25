@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Repository\AdvanceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Lesson;
 use App\Entity\Content;
+use App\Entity\User;
 use App\Entity\LessonContent;
 use App\Form\LessonType;
 use App\Form\ContentType;
@@ -15,6 +17,7 @@ use App\Repository\LessonContentRepository;
 use App\Repository\ContentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
 class LessonController extends AbstractController
@@ -207,16 +210,27 @@ class LessonController extends AbstractController
         ]);
     }
 
+
+
     /**
+     * @IsGranted({"ROLE_ADMIN", "ROLE_STAGIAIRE"})
      * @Route("/lesson/{id}", name="lesson_show")
      **/
-    public function show(Lesson $lesson, LessonContent $lessonContent = null, LessonContentRepository $repo)
+    public function show(Lesson $lesson, LessonContent $lessonContent = null, AdvanceRepository $adv, LessonContentRepository $repo)
     {
-        $ranks = $repo->findBy(array('lesson' => $lesson->getId()), array('rank' => 'ASC'));
 
+        $ranks = $repo->findBy(array('lesson' => $lesson->getId()), array('rank' => 'ASC'));
+        $user = $this->getUser();
+        $progres = array();
+        foreach ($ranks as $rank)
+        {
+            $prog = $adv->findOneBy(array('user' => $user->getId(), 'content' => $rank->getContent()->getId()));
+            array_push($progres, $prog);
+        }
         return $this->render('lesson/show.html.twig', [
             'lesson' => $lesson,
-            'ranks' => $ranks
+            'ranks' => $ranks,
+            'progres' => $progres
         ]);
     }
 

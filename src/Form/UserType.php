@@ -22,7 +22,7 @@ class UserType extends AbstractType
             ->add('email')
             ->add('username')
             ->add('password', PasswordType::class, [
-                'always_empty' => false,
+                'disabled' => true,
                 'required' => false
             ])
             ->add('roles', ChoiceType::class, [
