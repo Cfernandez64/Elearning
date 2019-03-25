@@ -48,9 +48,11 @@ class Lesson
      */
     private $lessonContents;
 
+
     public function __construct()
     {
         $this->lessonContents = new ArrayCollection();
+        $this->contents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,4 +150,5 @@ class Lesson
 
         return $this;
     }
+
 }

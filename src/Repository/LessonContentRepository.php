@@ -19,6 +19,30 @@ class LessonContentRepository extends ServiceEntityRepository
         parent::__construct($registry, LessonContent::class);
     }
 
+    public function updateRank($id, $lesson, $content, $rank)
+    {
+        return $this->createQueryBuilder('r')
+            ->update(LessonContent::class, 'r')
+            ->set('r.lesson', '?1')
+            ->set('r.rank', '?2')
+            ->where('r.id = ?3')
+            ->setParameters(array(1 => $lesson, 2 => $rank, 3 => $id))
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function deleteDataInLessonContent($id)
+    {
+        return $this->createQueryBuilder('z')
+            ->delete(LessonContent::class, 'z')
+            ->where('z.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return LessonContent[] Returns an array of LessonContent objects
     //  */

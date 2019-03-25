@@ -1,20 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LessonController!{% endblock %}
+{% block title %}Liste des cours{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="example-wrapper">
+        <h1>Liste des cours</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/Symfony/src/Controller/LessonController.php'|file_link(0) }}">src/Controller/LessonController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/Symfony/templates/lesson/index.html.twig'|file_link(0) }}">templates/lesson/index.html.twig</a></code></li>
-    </ul>
-</div>
+        {% for lesson in lessons %}
+            <div class="card mt-3" id="cour-{{ lesson.id }}">
+                <div class="card-body">
+                    <h4 class="card-title">{{ lesson.title }}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">Intervenant : {{ lesson.teacher }}</h6>
+                    <p class="card-text"><small>Durée du cours : {{ lesson.duration }}</small></p>
+                    <a class="card-link" href="{{ path('lesson_show', {'id':lesson.id}) }}">Lire la suite</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

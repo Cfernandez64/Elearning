@@ -19,17 +19,17 @@ class LessonContent
     /**
      * @ORM\Column(type="integer")
      */
-    private $rank;
+    private $rank = 0;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Lesson", inversedBy="lessonContents")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Lesson", inversedBy="lessonContents", cascade={"persist", "remove"})
      */
-    private $lessons;
+    private $lesson;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Content", inversedBy="lessonContents")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Content", inversedBy="lessonContents", cascade={"persist"})
      */
-    private $contents;
+    private $content;
 
     public function getId(): ?int
     {
@@ -48,26 +48,26 @@ class LessonContent
         return $this;
     }
 
-    public function getLessons(): ?Lesson
+    public function getLesson(): ?Lesson
     {
-        return $this->lessons;
+        return $this->lesson;
     }
 
-    public function setLessons(?Lesson $lessons): self
+    public function setLesson(?Lesson $lesson): self
     {
-        $this->lessons = $lessons;
+        $this->lesson = $lesson;
 
         return $this;
     }
 
-    public function getContents(): ?Content
+    public function getContent(): ?Content
     {
-        return $this->contents;
+        return $this->content;
     }
 
-    public function setContents(?Content $contents): self
+    public function setContent(?Content $content): self
     {
-        $this->contents = $contents;
+        $this->content = $content;
 
         return $this;
     }
