@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Entity\Cour;
+use App\Entity\Lesson;
 use App\Entity\Advance;
 use App\Form\AdvanceType;
 use Symfony\Component\Form\AbstractType;
@@ -33,8 +33,8 @@ class UserType extends AbstractType
                 'expanded'  => false, // liste déroulante
                 'multiple'  => true, // choix multiple
             ])
-            ->add('inCour', EntityType ::class, [
-                'class' => Cour::class,
+            ->add('inLesson', EntityType ::class, [
+                'class' => Lesson::class,
                 'choice_label'  => 'title'
             ])
             ->add('lastname')

@@ -68,9 +68,9 @@ class User implements UserInterface
     private $advances;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Cour", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Lesson", inversedBy="users")
      */
-    private $inCour;
+    private $inLesson;
 
     public function __construct()
     {
@@ -198,14 +198,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getInCour(): ?Cour
+    public function getInLesson(): ?Lesson
     {
-        return $this->inCour;
+        return $this->inLesson;
     }
 
-    public function setInCour(?Cour $inCour): self
+    public function setInLesson(?Lesson $inLesson): self
     {
-        $this->inCour = $inCour;
+        $this->inLesson = $inLesson;
 
         return $this;
     }

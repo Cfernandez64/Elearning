@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Cour;
-use App\Entity\Contenu;
+use App\Entity\Lesson;
+use App\Entity\Content;
+use App\Entity\LessonContent;
 use App\Entity\Advance;
 use App\Repository\AdvanceRepository;
-use App\Repository\CourRepository;
-use App\Repository\ContenuRepository;
+use App\Repository\LessonRepository;
+use App\Repository\LessonContentRepository;
+use App\Repository\ContentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,9 +22,27 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
+
+
     /**
-     * @Route("/users/new", name="user_create")
-     * @ROUTE("/users/{id}/edit", name="user_edit")
+     * @Route("/admin", name="admin")
+     */
+    public function index(LessonRepository $repo, UserRepository $repos)
+    {
+
+        $lessons = $repo->findBy(array(), array('createdAt' => 'DESC'), 3);
+        $stagiaires = $repos->findAll();
+
+        return $this->render('admin/dashboard.html.twig', [
+            'lessons' => $lessons,
+            'stagiaires' => $stagiaires
+        ]);
+    }
+
+
+    /**
+     * @Route("/admin/users/new", name="user_create")
+     * @ROUTE("/admin/users/{id}/edit", name="user_edit")
      */
     public function formUser(User $user = null, UserRepository $repo, Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder)
     {
@@ -42,9 +62,8 @@ class UserController extends AbstractController
             $manager->persist($user);
             $manager->flush();
 
-            $cour = $form->get('inCour')->getData();
-            $data = $cour->getId();
-            return $this->redirectToRoute('advance_edit', ['user' => $user->getId(), 'cour' => $data ]);
+            $lesson = $form->get('inLesson')->getData()->getId();
+            return $this->redirectToRoute('user_advance', ['user' => $user->getId(), 'lesson' => $lesson]);
         }
 
         return $this->render('user/edit.html.twig', [
@@ -53,38 +72,55 @@ class UserController extends AbstractController
             'user'        => $user
         ]);
     }
-
-
     /**
-     * @ROUTE("/users/{user}/{cour}/advance", name="advance_edit")
+     * @Route("/admin/users/{user}-{lesson}/advance", name="user_advance")
      */
-    public function advance(Advance $advance = null, AdvanceRepository $repo, User $user, Cour $cour, Request $request, ObjectManager $manager)
+    public function advance(Advance $advance = null, AdvanceRepository $repo, LessonContentRepository $repos, User $user, Lesson $lesson, Request $request, ObjectManager $manager)
     {
-        if (!$advance)
+         //Contents déjà en base associé à la lesson
+        $contents = $repos->findBy(array('lesson' => $lesson->getId()));
+        $ids = $repo->findBy(array('user' => $user->getId()));
+        $userContent = array();
+        foreach ($ids as $id)
         {
+            array_push($userContent, $id->getContent()->getId());
+        }
 
-            $contenus = $cour->getContenus();
-
-            foreach($contenus as $contenu)
+        if (!$ids)
+        {
+            foreach ($contents as $content)
             {
                 $advance = new Advance();
                 $advance->setUser($user);
-                $advance->setContenuId($contenu->getId());
+                $advance->setContent($content->getContent());
                 $manager->persist($advance);
                 $manager->flush();
             }
-            return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
+        } else {
+
+
+            foreach ($contents as $content)
+            {
+
+                if(!in_array($content->getContent()->getId(), $userContent))
+                {
+
+                    $advance = new Advance();
+                    $advance->setUser($user);
+                    $advance->setContent($content->getContent());
+                    $manager->persist($advance);
+                    $manager->flush();
+                }
+            }
         }
 
         return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
-
-
     }
 
     /**
-     * @Route("/users", name="user")
+     * @Route("/admin/users", name="user")
      */
-    public function index(UserRepository $repo)
+    public function indexUser(UserRepository $repo)
     {
         $users = $repo->findAll();
 
@@ -97,27 +133,24 @@ class UserController extends AbstractController
     /**
      * @Route("/admin/users/{id}", name="user_show")
      */
-    public function show(User $user, CourRepository $repo, ContenuRepository $repos, AdvanceRepository $repoad)
+    public function show(User $user, LessonRepository $repo, LessonContent $lessonContent = null, LessonContentRepository $repos, AdvanceRepository $repoad)
     {
-        $isCour = $user->getInCour()->getId();
-        $cour = $repo->findOneBy(array('id' => $isCour));
-        $contenus = $repos->findBy(array('inCour' => $cour));
+        $isLesson = $user->getInLesson()->getId();
+        $lesson = $repo->findOneBy(array('id' => $isLesson));
+        $contents = $repos->findBy(array('lesson' => $lesson));
 
-        $progres = $repoad->findBy(array('user' => $user->getId()));
+        foreach($contents as $content)
+        {
+
+            $progres = $repoad->findBy(array('user' => $user->getId()));
+        }
 
         return $this->render('user/show.html.twig', [
             'user' => $user,
-            'cour' => $cour,
-            'contenus' => $contenus,
+            'contents' => $contents,
             'progres' => $progres
         ]);
     }
 
-    /**
-     * @Route("/users/{id}/{cour_id}/advances", name="user_advance")
-     */
-    public function createAdvances($user, $cour)
-    {
-        $contenus = $cour->getContenus();
-    }
+
 }

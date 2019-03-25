@@ -250,13 +250,16 @@ class LessonController extends AbstractController
     /**
      * @Route("/lesson/{lesson_id}/{content_id}-{slug}", name="content_learn")
      */
-    public function learn($lesson_id, $content_id, ContentRepository $repo, LessonRepository $repoc)
+    public function learn($lesson_id, $content_id, ContentRepository $repo, LessonContentRepository $repos, LessonRepository $repoc)
     {
         $content = $repo->find($content_id);
         $lesson = $repoc->find($lesson_id);
+        $ranks = $repos->findBy(array('lesson' => $lesson->getId()), array('rank' => 'ASC'));
+
         return $this->render('lesson/learn.html.twig', [
             'content'   => $content,
-            'lesson'   => $lesson
+            'lesson'   => $lesson,
+            'ranks' => $ranks
         ]);
     }
 

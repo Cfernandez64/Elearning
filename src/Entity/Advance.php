@@ -28,9 +28,10 @@ class Advance
     private $user;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Content")
      */
-    private $contenu_id;
+    private $content;
+
 
 
     public function getId(): ?int
@@ -62,17 +63,16 @@ class Advance
         return $this;
     }
 
-    public function getContenuId(): ?int
+    public function getContent(): ?Content
     {
-        return $this->contenu_id;
+        return $this->content;
     }
 
-    public function setContenuId(int $contenu_id): self
+    public function setContent(?Content $content): self
     {
-        $this->contenu_id = $contenu_id;
+        $this->content = $content;
 
         return $this;
     }
-
 
 }

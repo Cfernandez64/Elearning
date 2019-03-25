@@ -43,6 +43,11 @@ class Content
      */
     private $lessonContents;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Lesson", inversedBy="contents")
+     */
+    private $lessons;
+
 
     public function __construct()
     {
@@ -129,6 +134,32 @@ class Content
             if ($lessonContent->getContents() === $this) {
                 $lessonContent->setContents(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Lesson[]
+     */
+    public function getLessons(): Collection
+    {
+        return $this->lessons;
+    }
+
+    public function addLesson(Lesson $lesson): self
+    {
+        if (!$this->lessons->contains($lesson)) {
+            $this->lessons[] = $lesson;
+        }
+
+        return $this;
+    }
+
+    public function removeLesson(Lesson $lesson): self
+    {
+        if ($this->lessons->contains($lesson)) {
+            $this->lessons->removeElement($lesson);
         }
 
         return $this;
