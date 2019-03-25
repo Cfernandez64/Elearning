@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}E-learning Bleu Social{% endblock %}</title>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <link rel="stylesheet"
   href="https://bootswatch.com/4/flatly/bootstrap.min.css">
   {% block stylesheet %}{% endblock %}
@@ -18,14 +20,20 @@
   <div class="collapse navbar-collapse" id="navbarColor01">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="{{ path('home') }}">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{{ path('lesson') }}">Tous les cours <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ path('blog_create') }}">Créer un article</a>
+        <a class="nav-link" href="{{ path('user') }}">Tous les utilisateurs</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{  path('blog') }}">Articles</a>
-      </li>
+      {% if not app.user %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('security_login') }}">Se connecter</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('security_logout') }}">Déconnexion</a>
+        </li>
+      {% endif %}
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="text" placeholder="Search">
@@ -33,7 +41,7 @@
     </form>
   </div>
 </nav>
-  <div class="container">
+  <div class="container mt-4">
     {% block body %}{% endblock %}
   </div>
 </body>

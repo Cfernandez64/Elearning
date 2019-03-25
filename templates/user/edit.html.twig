@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} User : {{ user.firstname }} {{ user.lastname }}{% endblock %}
+
+{% block body %}
+
+    <h3 class="border-bottom">{{ user.firstname }} {{ user.lastname }}</h3>
+
+    {{ form_start(formUser) }}
+
+    {{ form_row(formUser.email, {'attr':{'placeholder':"Email"}}) }}
+
+    {{ form_row(formUser.username) }}
+
+    {{ form_row(formUser.roles, {'attr':{'placeholder':"Roles"}})  }}
+
+
+    {{ form_row(formUser.password) }}
+    {{ form_row(formUser.lastname) }}
+    {{ form_row(formUser.firstname) }}
+
+    {{ form_row(formUser.inLesson) }}
+
+    <button type="submit" class="btn btn-success" name="button">
+        {% if editMode %}
+            Enregistrer
+        {% else %}
+            Créer l'utilisateur
+        {% endif %}</button>
+
+    {{ form_end(formUser) }}
+
+{% endblock %}

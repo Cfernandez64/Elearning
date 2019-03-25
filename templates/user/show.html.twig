@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Utilisateurs{% endblock %}
+
+{% block body %}
+    <h1>{{ user.firstname }} {{ user.lastname }}</h1>
+    <section class="user">
+        <table class="w-100" cellpadding="10">
+            <thead class="table-info">
+                <tr>
+                    <td>Nom</td>
+                    <td>Prénom</td>
+                    <td>Rôle</td>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr style="border:1px solid #ccc">
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.roles[0] }}</td>
+                    </tr>
+            </tbody>
+        </table>
+        <div>
+            <h4 class="mt-4">Inscrit au cours : {{ user.inLesson.title }}</h4>
+        </div>
+        <div>
+            <ul>
+                {% for content in contents %}
+                    <li>
+                        {{ content.content.title }}
+                        {% for prog in progres %}
+                            {% if content.content.id == prog.content.id %}
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ prog.percentage }}%;" aria-valuenow="{{ prog.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ prog.percentage }}%</div>
+                        </div>
+                            {% endif %}
+                        {% endfor %}
+
+
+
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+        <p class="mt-4"><a href="{{ path('user_edit', {'id':user.id}) }}" class="btn btn-primary">Modifier cet utilisateur</a></p>
+    </section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace d'administration{% endblock %}
+
+{% block body %}
+
+    <h3 class="mt-5 mb-5">Bienvenue dans l'espace d'aministration</h3>
+
+    <div class="row">
+        <div class="col-3">
+            <h5>Derniers cours publiés :</h5>
+            {% for lesson in lessons %}
+                <div class="border-bottom">
+                    <strong>{{ lesson.title }}</strong>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-3">
+            <h5>Stagiaires</h5>
+            {% for stagiaire in stagiaires %}
+
+                {% if stagiaire.roles[0] == 'ROLE_STAGIAIRE' %}
+                <div class="border-bottom">
+                    <strong>{{ stagiaire.lastname }} {{  stagiaire.firstname }} </strong>
+                    <br>Inscrit pour : {{ stagiaire.inLesson.title }}
+                    <a class="btn btn-primary" href="{{ path('user_show', {id:stagiaire.id}) }}">Voir sa progression</a>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
