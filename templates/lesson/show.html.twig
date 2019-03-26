@@ -6,14 +6,17 @@
   <h2>{{ lesson.title }}</h2>
   <h6>{{ lesson.teacher }}</h6>
   <hr>
-    {% set total = 0 %}
-    {% for prog in progres %}
-        {% set total = total + prog.percentage %}
-    {% endfor %}
+    {% if progres|length > 0 %}
+        {% set total = 0 %}
+        {% for prog in progres %}
+            {% set total = total + prog.percentage %}
+        {% endfor %}
+
     <p>Progression totale : </p>
     <div class="progress">
         <div class="progress-bar" role="progressbar" style="width: {{  total / progres|length }}%;" aria-valuenow="{{  total / progres|length }}" aria-valuemin="0" aria-valuemax="100">{{  total / progres|length }}%</div>
     </div>
+    {% endif %}
 
   <p class="mt-5">
     <strong>

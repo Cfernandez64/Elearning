@@ -28,7 +28,7 @@ class ContentType extends AbstractType
                 'multiple'  => true,
                 'by_reference' => false
             ])
-            ->add('content')
+            ->add('content', FroalaEditorType::class, ['attr'=>['id','froala-editor']])
 
         ;
     }
