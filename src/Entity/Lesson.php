@@ -39,7 +39,7 @@ class Lesson
     private $teacher;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $createdAt;
 

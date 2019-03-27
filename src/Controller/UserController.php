@@ -26,7 +26,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/admin", name="admin")
-     */
+
     public function index(LessonRepository $repo, UserRepository $repos)
     {
 
@@ -38,6 +38,7 @@ class UserController extends AbstractController
             'stagiaires' => $stagiaires
         ]);
     }
+    */
 
 
     /**
