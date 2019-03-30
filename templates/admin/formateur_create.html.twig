@@ -1,0 +1,31 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+
+    <h1>
+        {%  if editMode is defined %}
+            Modification du formateur
+        {% else %}
+            Ajout d'un formateur
+        {% endif %}
+    </h1>
+
+    {% form_theme formFormateur 'bootstrap_4_layout.html.twig' %}
+
+    {{ form_start(formFormateur) }}
+
+    {{ form_row(formFormateur.nom, {'attr':{'placeholder':"Nom du formateur"}}) }}
+    {{ form_row(formFormateur.prenom, {'attr':{'placeholder':"Préom du formateur"}}) }}
+
+    <button type="submit" class="btn btn-success" name="button">
+
+        {%  if editMode is defined %}
+            Modifier
+        {% else %}
+            Ajouter
+        {% endif %}
+    </button>
+
+    {{ form_end(formFormateur) }}
+
+{% endblock %}

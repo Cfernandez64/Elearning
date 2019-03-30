@@ -23,16 +23,15 @@ class AdvanceRepository extends ServiceEntityRepository
     //  * @return Advance[] Returns an array of Advance objects
     //  */
 
-    public function findByExampleField($value)
+    public function removeAdvance($id)
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('z')
+            ->delete(Advance::class, 'z')
+            ->where('z.id = :id')
+            ->setParameter('id', $id)
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
 
 

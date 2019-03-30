@@ -1,0 +1,34 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+
+  <h1>
+    {% if editMode is defined %}
+    Modifier un contenu
+    {% else %}
+    Création d'un contenu
+    {% endif %}
+  </h1>
+
+  {% form_theme formContent 'bootstrap_4_layout.html.twig' %}
+
+  {{ form_start(formContent) }}
+
+  {{ form_row(formContent.title) }}
+  {{ form_row(formContent.slug) }}
+  {{ form_row(formContent.lessons) }}
+  {{ form_row(formContent.content)}}
+
+
+
+
+  <button type="submit" class="btn btn-success" name="button">
+    {% if editMode is defined %}
+    Enregistrer
+    {% else %}
+    Créer le contenu
+    {% endif %}</button>
+
+    {{ form_end(formContent) }}
+
+{% endblock %}

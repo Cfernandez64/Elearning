@@ -2,14 +2,19 @@
 
 {% block body %}
 <article class="lessons mt-5">
-  
+
   <h2>{{ lesson.title }}</h2>
-  <h6>{{ lesson.teacher }}</h6>
+  {% for formateur in lesson.formateurs %}
+  <h6>{{ formateur.nom }} {{ formateur.prenom }}</h6>
+  {% endfor %}
   <hr>
+
     {% if progres|length > 0 %}
         {% set total = 0 %}
         {% for prog in progres %}
+
             {% set total = total + prog.percentage %}
+
         {% endfor %}
 
     <p>Progression totale : </p>
@@ -17,6 +22,7 @@
         <div class="progress-bar" role="progressbar" style="width: {{  total / progres|length }}%;" aria-valuenow="{{  total / progres|length }}" aria-valuemin="0" aria-valuemax="100">{{  total / progres|length }}%</div>
     </div>
     {% endif %}
+
 
   <p class="mt-5">
     <strong>

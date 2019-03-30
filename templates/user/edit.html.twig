@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block title %} User : {{ user.firstname }} {{ user.lastname }}{% endblock %}
 
@@ -19,7 +19,7 @@
     {{ form_row(formUser.lastname) }}
     {{ form_row(formUser.firstname) }}
 
-    {{ form_row(formUser.inLesson) }}
+    {{ form_row(formUser.inLessons) }}
 
     <button type="submit" class="btn btn-success" name="button">
         {% if editMode %}

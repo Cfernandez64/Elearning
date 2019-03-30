@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Lesson;
 use App\Entity\Content;
+use App\Entity\Formateur;
 use App\Entity\LessonContent;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -28,6 +29,12 @@ class LessonType extends AbstractType
                 'choice_label'  => 'title',
                 'multiple'  => true,
                 'by_reference' => false
+            ])
+            ->add('formateurs', EntityType::class, [
+              'class' => Formateur::class,
+              'choice_label' => 'nom',
+              'multiple' => true,
+              'by_reference' => false
             ])
             ->add('teacher')
         ;

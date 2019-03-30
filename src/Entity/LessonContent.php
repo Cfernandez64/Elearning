@@ -27,7 +27,7 @@ class LessonContent
     private $lesson;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Content", inversedBy="lessonContents", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Content", inversedBy="lessonContents", cascade={"persist", "remove"})
      */
     private $content;
 

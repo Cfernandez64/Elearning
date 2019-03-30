@@ -24,12 +24,10 @@ class LessonController extends AbstractController
 {
 
 
-
-
     /**
      * @Route("/lesson/new", name="lesson_create")
      * @Route("lesson/{id}/edit", name="lesson_edit")
-     **/
+
     public function formLesson(Lesson $lesson = null, LessonContent $lessonContent = null, LessonContentRepository $repo, Request $request, ObjectManager $manager)
     {
         if(!$lesson)
@@ -111,11 +109,11 @@ class LessonController extends AbstractController
             'editMode'  => $lesson->getId() !== null
         ]);
     }
-
+     **/
     /**
      * @Route("/lesson/content/new", name="content_create")
      * @Route("lesson/content/{id}/edit", name="content_edit")
-     **/
+
     public function formContent(Content $content = null, LessonContent $lessonContent = null, LessonContentRepository $repo, Request $request, ObjectManager $manager)
     {
         if(!$content)
@@ -143,25 +141,25 @@ class LessonController extends AbstractController
             $hasContent = $repo->findBy(array('content' => $content->getId()));
 
                 //ID des enregistrements déjà existants
-                $ids = array();
+                $ids = [];
 
                 //ID des lessons choisies dans le formulaire
-                $lessonsId = array();
+                $lessonsId = [];
 
                 //ID des lessons associées aux contenus déjà enregistrées dans la table
-                $alreadyLesson = array();
+                $alreadyLesson = [];
 
                 //Crée le tableau d'id des contenus
                 foreach ($hasContent as $contentId)
                 {
-                    array_push($ids, $contentId->getId());
-                    array_push($alreadyLesson, $contentId->getLesson()->getId());
+                    $ids[] = $contentId->getId();
+                    $alreadyLesson[] = $contentId->getLesson()->getId();
                 }
 
                 //Crée le tableau id des lessons
                 foreach ($lessons as $lesson)
                 {
-                    array_push($lessonsId, $lesson->getId());
+                    $lessonsId[] = $lesson->getId();
                 }
 
                 //boucle sur le tableau d'id
@@ -197,7 +195,7 @@ class LessonController extends AbstractController
             'editMode'  => $content->getId() !== null
         ]);
     }
-
+     **/
 
     /**
      * @Route("/lesson", name="lesson")

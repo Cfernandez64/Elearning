@@ -34,11 +34,6 @@ class Lesson
     private $duration;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $teacher;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $createdAt;
@@ -53,11 +48,23 @@ class Lesson
      */
     private $contents;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="inLessons")
+     */
+    private $users;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Formateur", mappedBy="lessons")
+     */
+    private $formateurs;
+
 
     public function __construct()
     {
         $this->lessonContents = new ArrayCollection();
         $this->contents = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->formateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,17 +108,6 @@ class Lesson
         return $this;
     }
 
-    public function getTeacher(): ?string
-    {
-        return $this->teacher;
-    }
-
-    public function setTeacher(?string $teacher): self
-    {
-        $this->teacher = $teacher;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -179,6 +175,62 @@ class Lesson
         if ($this->contents->contains($content)) {
             $this->contents->removeElement($content);
             $content->removeLesson($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addInLesson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            $user->removeInLesson($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Formateur[]
+     */
+    public function getFormateurs(): Collection
+    {
+        return $this->formateurs;
+    }
+
+    public function addFormateur(Formateur $formateur): self
+    {
+        if (!$this->formateurs->contains($formateur)) {
+            $this->formateurs[] = $formateur;
+            $formateur->addLesson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormateur(Formateur $formateur): self
+    {
+        if ($this->formateurs->contains($formateur)) {
+            $this->formateurs->removeElement($formateur);
+            $formateur->removeLesson($this);
         }
 
         return $this;

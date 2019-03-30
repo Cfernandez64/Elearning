@@ -1,0 +1,53 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Liste des cours{% endblock %}
+
+{% block body %}
+
+
+        <div class="row align-items-center justify-content-between border-bottom pb-4">
+            <div class="col-4">
+                <h2>Liste des cours</h2>
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="col-2 text-md-right text-center">
+                    <a class="btn btn-danger" href="{{ path('lesson_create') }}">Ajouter un cours</a>
+                </div>
+            {% endif %}
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr class="table-primary">
+                <th scope="col">Titre du cours</th>
+                <th scope="col">Date de création</th>
+                <th scope="col">Formateurs</th>
+                <th scope="col">Modifier</th>
+                <th scope="col">Supprimer</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for lesson in lessons %}
+            <tr>
+                <td>
+                    <a href="{{ path('lesson_edit', {id:lesson.id}) }}">{{ lesson.title }}</a><br>
+                    <small>Contenus associés :
+                    <ol>
+                    {% for content in lesson.contents %}
+                            <li>
+                                {{ content.title }}
+                            </li>
+                    {% endfor %}
+                    </ol></small>
+
+                </td>
+                <td>{{ lesson.createdAt|date('d-m-Y') }}</td>
+                <td>{{ lesson.teacher }}</td>
+                <td><a href="{{ path('lesson_edit', {id:lesson.id}) }}">Editer</a></td>
+                <td><a href="{{ path('lesson_delete', {id:lesson.id}) }}">Supprimer</a></td>
+            </tr>
+
+            {% endfor %}
+
+            </div>
+
+{% endblock %}

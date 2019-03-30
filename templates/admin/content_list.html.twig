@@ -1,0 +1,38 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Liste des contenus{% endblock %}
+
+{% block body %}
+
+
+    <div class="row align-items-center justify-content-between border-bottom pb-4">
+        <div class="col-4">
+            <h2>Liste des contenus</h2>
+        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="col-2 text-md-right text-center">
+                <a class="btn btn-danger" href="{{ path('content_create') }}">Ajouter un contenu</a>
+            </div>
+        {% endif %}
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col">Titre du contenu</th>
+            <th scope="col">Date de création</th>
+            <th scope="col">Modifier</th>
+            <th scope="col">Supprimer</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for content in contents %}
+        <tr>
+            <td><a href="{{ path('content_edit', {id:content.id}) }}">{{ content.title }}</a></td>
+            <td>{{ content.createdAt|date('d-m-Y') }}</td>
+            <td><a href="{{ path('content_edit', {id:content.id}) }}">Editer</a></td>
+            <td><a href="{{ path('content_delete', {id:content.id}) }}">Supprimer</a></td>
+        </tr>
+        {% endfor %}
+        </div>
+
+{% endblock %}

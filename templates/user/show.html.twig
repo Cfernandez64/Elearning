@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block title %}Liste des Utilisateurs{% endblock %}
 
@@ -22,10 +22,19 @@
             </tbody>
         </table>
         {% if contents is defined %}
+
         <div>
-            <h4 class="mt-4">Inscrit au cours : {{ user.inLesson.title }}</h4>
+            <h4 class="mt-4">Inscrit au cours :</h4>
+
+            <ul>
+                {% for lesson in user.inLessons %}
+                    <li>{{ lesson.title }}</li>
+                {% endfor %}
+            </ul>
+
         </div>
         <div>
+            <h5>Contenus</h5>
             <ul>
                 {% for content in contents %}
                     <li>
@@ -37,9 +46,6 @@
                                 </div>
                             {% endif %}
                         {% endfor %}
-
-
-
                     </li>
                 {% endfor %}
 

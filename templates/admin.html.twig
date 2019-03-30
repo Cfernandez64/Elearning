@@ -1,0 +1,68 @@
+{# templates/admin.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}E-learning Bleu Social{% endblock %}</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{{ asset('web/js/froala.js') }}"></script>
+    <script src="{{ asset( 'bundles/kmsfroalaeditor/froala_editor_2.9.3/js/froala_editor.min.js') }}"></script>
+    <link rel="stylesheet"
+          href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+    {% block stylesheet %}{% endblock %}
+    <style>
+        .wrapper {
+            display: flex;
+            align-items: stretch;
+        }
+
+        #sidebar {
+            min-width: 250px;
+            max-width: 250px;
+        }
+    </style>
+</head>
+<body>
+<div class="bg-primary row justify-content-between align-items-center p-3">
+    <div class="col-4">
+        <p class="my-2 my-lg-0 text-white">
+
+            {{ app.user.firstname }} {{ app.user.lastname }}
+        </p>
+        <p class="my-2 my-lg-0 text-white">
+
+            {% if not app.user %}
+                    <a class="text-white" href="{{ path('security_login') }}">Se connecter</a>
+            {% else %}
+                <small><a class="text-white" href="{{ path('security_logout') }}">Déconnexion</a></small>
+
+            {% endif %}
+        </p>
+    </div>
+    <div class="col-4 text-right">
+        <a class="text-white" href="{{ path('lesson') }}">Retour au site</a>
+    </div>
+</div>
+<div class="wrapper">
+    <div id="sidebar" class="">
+        <div class="list-group">
+                <a class="list-group-item list-group-item-action" href="#">Tableau de bord</a>
+
+                <a class="list-group-item list-group-item-action" href="{{ path('lesson_admin') }}">Cours</a>
+
+                <a class="list-group-item list-group-item-action" href="{{ path('content_admin') }}">Contenu de cours</a>
+
+                <a class="list-group-item list-group-item-action" href="{{ path('user') }}">Utilisateurs</a>
+
+                <a class="list-group-item list-group-item-action" href="{{ path('formateur_admin') }}" >Formateurs</a>
+
+        </div>
+    </div>
+    <div id="" class="container pt-5">
+        {% block body %}{% endblock %}
+
+    </div>
+</div>
+</body>
+</html>

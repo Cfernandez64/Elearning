@@ -1,10 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block body %}
 
     <h1>
-        {% if editMode %}
-            Modifier un cours
+        {%  if editMode is defined %}
+            Modification du cours
         {% else %}
             Création d'un cours
         {% endif %}
@@ -16,20 +16,20 @@
 
     {{ form_row(formLesson.title, {'attr':{'placeholder':"Titre du cours"}}) }}
 
-
-
-    {{ form_row(formLesson.teacher) }}
+    {{ form_row(formLesson.formateurs) }}
     {{ form_row(formLesson.duration) }}
     {{ form_row(formLesson.contents) }}
     {{ form_row(formLesson.description) }}
 
 
     <button type="submit" class="btn btn-success" name="button">
-        {% if editMode %}
-            Enregistrer
+
+        {%  if editMode is defined %}
+            Modifier le cours
         {% else %}
             Créer le cours
-        {% endif %}</button>
+        {% endif %}
+    </button>
 
     {{ form_end(formLesson) }}
 

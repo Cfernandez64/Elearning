@@ -19,6 +19,18 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function updateUser($id)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder($id);
+        $null = 0;
+        $q = $qb->update(User::class, 'u')
+            ->set('u.inLessons', $qb->expr()->literal($null))
+            ->where('u.id = ?1')
+            ->setParameter(1, $id)
+            ->getQuery();
+        return $q->execute();
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

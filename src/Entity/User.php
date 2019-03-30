@@ -68,13 +68,15 @@ class User implements UserInterface
     private $advances;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Lesson", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Lesson", inversedBy="users")
      */
-    private $inLesson;
+    private $inLessons;
+
 
     public function __construct()
     {
         $this->advances = new ArrayCollection();
+        $this->inLessons = new ArrayCollection();
     }
 
      public function getId(): ?int
@@ -198,14 +200,28 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getInLesson(): ?Lesson
+    /**
+     * @return Collection|Lesson[]
+     */
+    public function getInLessons(): Collection
     {
-        return $this->inLesson;
+        return $this->inLessons;
     }
 
-    public function setInLesson(?Lesson $inLesson): self
+    public function addInLesson(Lesson $inLesson): self
     {
-        $this->inLesson = $inLesson;
+        if (!$this->inLessons->contains($inLesson)) {
+            $this->inLessons[] = $inLesson;
+        }
+
+        return $this;
+    }
+
+    public function removeInLesson(Lesson $inLesson): self
+    {
+        if ($this->inLessons->contains($inLesson)) {
+            $this->inLessons->removeElement($inLesson);
+        }
 
         return $this;
     }

@@ -33,9 +33,10 @@ class UserType extends AbstractType
                 'expanded'  => false, // liste déroulante
                 'multiple'  => true, // choix multiple
             ])
-            ->add('inLesson', EntityType ::class, [
+            ->add('inLessons', EntityType ::class, [
                 'class' => Lesson::class,
-                'choice_label'  => 'title'
+                'choice_label'  => 'title',
+                'multiple' => true
             ])
             ->add('lastname')
             ->add('firstname')
