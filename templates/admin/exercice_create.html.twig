@@ -1,0 +1,108 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+
+  <h1>
+    {% if editMode is defined %}
+    Modifier le quiz
+    {% else %}
+    Création d'un quiz
+    {% endif %}
+  </h1>
+  <h3>Choisir un contenu associé pour ce quiz :</h3>
+  <select id="for-contenu" class="form-control mb-4">
+    {% for content in contents %}
+      <option value="{{ content.id }}">{{ content.title }}</option>
+    {% endfor %}
+  </select>
+  {% form_theme formExercice 'bootstrap_4_layout.html.twig' %}
+  <style>
+    .first, .dop{
+      display: none;
+    }
+  </style>
+  <div id="question-1" class="question border-bottom pb-3 mb-3 mt-3 first">
+    <h4>Question <span class="count-question">1</span></h4>
+    <a class="remover" id="1">Supprimer cette question</a><br>
+    {{ form_start(formExercice, {'attr': {'class' : 'bg-light p-3'}}) }}
+
+    {{ form_row(formExercice.contenu, {'attr': {'class' : 'exercice_contenu'}} )}}
+    {{ form_row(formExercice.question) }}
+    {{ form_row(formExercice.propositionUn) }}
+    {{ form_row(formExercice.propositionDeux) }}
+    {{ form_row(formExercice.propositionTrois) }}
+
+    {{ form_end(formExercice) }}
+  </div>
+  <div class="row justify-content-between dop">
+    <button class="btn btn-primary add">Ajouter une question</button>
+    <button class="btn btn-success validate">Valider le quiz</button>
+  </div>
+
+  <p class="success"></p>
+
+  <script>
+
+  $('#for-contenu').change(function(){
+    $('.first').show();
+    $('.dop').show();
+
+    var choiceContenu = $('#for-contenu').val();
+    $('.exercice_contenu').val(choiceContenu);
+  });
+
+
+  $('.add').click(function(){
+    var id = $('.dop').prev();
+    var newBlock = $(id).clone();
+    newBlock.find('form input').val('');
+    newBlock.insertBefore('.dop');
+    var choiceContenu = $('#for-contenu').val();
+    $('.exercice_contenu').val(choiceContenu);
+
+    numeroter();
+  });
+
+
+
+    function numeroter(){
+      $('.question').each(function(index){
+
+        //Display numéro de la question
+        $(this).find('.count-question').html(index+1);
+
+        //Attribut un id au block
+        $(this).attr('id', 'question-'+(index+1));
+
+        //Attribut un id au delete
+        $(this).find('.remover').attr('id', (index+1));
+
+
+      });
+
+      $('.remover').click(function(event){
+        var blockToRemove = $(this).attr('id');
+        $('#question-'+ blockToRemove).remove();
+      });
+    }
+
+//AJAX A CREER
+    $('.validate').click(function(){
+        var forms = $('.question form');
+        forms.each(function(index){
+            $.ajax({
+                url: "insert",
+                type: 'POST',
+                success: function(response){
+                    $('.success').html("<span class='badge badge-pill badge-success'>Succès</span> Le quiz a été enregistré");
+                },
+                error : function (response){
+                    $('.success').html("<span class='badge badge-pill badge-warning'>Warning</span> Une erreur s'est produite, veuillez réessayer.");;
+                }
+            });
+        });
+    });
+
+  </script>
+
+{% endblock %}

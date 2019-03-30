@@ -48,11 +48,17 @@ class Content
      */
     private $lessons;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Exercice", mappedBy="contenu")
+     */
+    private $exercices;
+
 
     public function __construct()
     {
         $this->lessonContents = new ArrayCollection();
         $this->lessons = new ArrayCollection();
+        $this->exercices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +166,37 @@ class Content
     {
         if ($this->lessons->contains($lesson)) {
             $this->lessons->removeElement($lesson);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Exercice[]
+     */
+    public function getExercices(): Collection
+    {
+        return $this->exercices;
+    }
+
+    public function addExercice(Exercice $exercice): self
+    {
+        if (!$this->exercices->contains($exercice)) {
+            $this->exercices[] = $exercice;
+            $exercice->setContenu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExercice(Exercice $exercice): self
+    {
+        if ($this->exercices->contains($exercice)) {
+            $this->exercices->removeElement($exercice);
+            // set the owning side to null (unless already changed)
+            if ($exercice->getContenu() === $this) {
+                $exercice->setContenu(null);
+            }
         }
 
         return $this;

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Lesson;
 use App\Entity\Content;
 use App\Entity\Formateur;
+use App\Entity\Exercice;
 use App\Entity\LessonContent;
 use App\Entity\Advance;
 use App\Repository\AdvanceRepository;
@@ -12,6 +13,7 @@ use App\Repository\LessonRepository;
 use App\Repository\LessonContentRepository;
 use App\Repository\ContentRepository;
 use App\Repository\FormateurRepository;
+use App\Repository\ExerciceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +23,7 @@ use App\Repository\UserRepository;
 use App\Form\UserType;
 use App\Form\LessonType;
 use App\Form\ContentType;
+use App\Form\ExerciceType;
 use App\Form\FormateurType;
 use App\Form\AdvanceType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -98,6 +101,40 @@ class AdminController extends AbstractController
             'formFormateur' => $form->createView()
         ]);
     }
+
+
+    /**
+     * @Route("admin/exercices/new", name="exercice_create")
+     **/
+    public function createExo(Exercice $exercice = null, Request $request, ObjectManager $manager, ContentRepository $repo)
+    {
+        $contents = $repo->findAll();
+        if(!$exercice)
+        {
+            $exercice = new Exercice();
+        }
+
+        $form = $this->createForm(ExerciceType ::class, $exercice);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $manager->persist($exercice);
+            $manager->flush();
+
+            return $this->redirectToRoute('exercice_admin');
+          }
+
+        return $this->render('admin/exercice_create.html.twig', [
+            'formExercice' => $form->createView(),
+            'contents' => $contents
+        ]);
+    }
+
+
+        
+
 
     /**
      * @Route("admin/lesson/{id}/edit", name="lesson_edit")
@@ -384,6 +421,19 @@ class AdminController extends AbstractController
         return $this->render('admin/content_list.html.twig', [
             'contents' => $contents
         ]);
+    }
+
+
+    /**
+     * @Route("admin/exercices", name="exercice_admin")
+    **/
+    public function exercice(ExerciceRepository $repo)
+    {
+      $exos = $repo->findBy(array(), array('contenu' => 'ASC'));
+
+      return $this->render('admin/exercice_list.html.twig', [
+      'exos' => $exos
+      ]);
     }
 
 
