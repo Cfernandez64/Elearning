@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Lesson;
 use App\Entity\Content;
 use App\Entity\User;
+use App\Entity\Advance;
 use App\Entity\LessonContent;
 use App\Form\LessonType;
 use App\Form\ContentType;
@@ -15,6 +16,7 @@ use App\Form\RankType;
 use App\Repository\LessonRepository;
 use App\Repository\LessonContentRepository;
 use App\Repository\ContentRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -45,11 +47,11 @@ class LessonController extends AbstractController
 
         $ranks = $repo->findBy(array('lesson' => $lesson->getId()), array('rank' => 'ASC'));
         $user = $this->getUser();
-        $progres = array();
+        $progres = [];
         foreach ($ranks as $rank)
         {
             $prog = $adv->findOneBy(array('user' => $user->getId(), 'content' => $rank->getContent()->getId()));
-            array_push($progres, $prog);
+            $progres[] = $prog;
         }
         return $this->render('lesson/show.html.twig', [
             'lesson' => $lesson,
@@ -101,4 +103,26 @@ class LessonController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/content/{content_id}/{user_id}", name="advance_update")
+     */
+     public function validContent($content_id, $user_id, ObjectManager $manager, AdvanceRepository $repo, ContentRepository $repos, UserRepository $us)
+     {
+       $advance = $repo->findOneBy(['user' => $user_id, 'content' => $content_id]);
+       $content = $repos->find($content_id);
+       $user = $us->find($user_id);
+       $valid = 100;
+       if($advance)
+       {
+         $advance->setPercentage($valid);
+         $manager->persist($advance);
+         $manager->flush();
+       } else {
+         $advance = new Advance();
+         $advance->setPercentage($valid)
+                 ->setUser($user)
+                 ->setContent($content);
+       }
+       return $this->redirectToRoute('lesson');
+     }
 }

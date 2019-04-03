@@ -10,7 +10,6 @@
 
 
   <div class="container mt-4">
-    <h3>{{ content.title }}</h3>
     <div class="row justify-content-between mt-4">
       <div class="col-md-4 px-3">
         <div class="list-group">
@@ -22,8 +21,35 @@
         </div>
       </div>
       <div class="mb-4 col-md-8" >
+
+        <h3 class="pb-3 mb-3 border-bottom">{{ content.title }}</h3>
         {{ content.content | raw }}
+        <div class="bg-light p-3">
+            <h3 class="border-bottom pb-2 mb-4">Quiz</h3>
+            <div id="qcm">
+            {% for exo in content.exercices %}
+            <div id="question-{{ loop.index }}" class="questionQcm border-bottom pb-1 pt-3">
+              <p class="qcm-question"><strong>{{ exo.question }}</strong></p>
+              <input type="checkbox" class="{% if 1 in exo.goodAnswers %}valid{% else %}no-valid{% endif %}" name="question-{{ loop.index }}" value="{{ exo.propositionUn }}"/> {{ exo.propositionUn }}<br>
+
+              <input type="checkbox" class="{% if 2 in exo.goodAnswers %}valid{% else %}no-valid{% endif %}" name="question-{{ loop.index }}" value="{{ exo.propositionDeux }}"/> {{ exo.propositionDeux }}<br>
+
+              <input type="checkbox" class="{% if 3 in exo.goodAnswers %}valid{% else %}no-valid{% endif %}" name="question-{{ loop.index }}" value="{{ exo.propositionTrois }}"/> {{ exo.propositionTrois }}<br>
+
+              <p class="result-{{ loop.index }}"></p>
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary mt-4" id="validation">Valider mes réponses</button>
+          </div>
+        </div>
+        <div id="next" style="display:none;" class="mt-4 text-center">
+          <input type="hidden" class="userid" value="{{ app.user.id }}"/>
+          <input type="hidden" class="contentid" value="{{ content.id }}"/>
+          <p><span class='badge badge-pill badge-success'>Succès</span> Bravo, vous avez bien répondu à toutes les questions !</p>
+          <button class="btn btn-success mx-auto mt-3">Je passe à la suite</button>
+        </div>
       </div>
+
     </div>
   </div>
 

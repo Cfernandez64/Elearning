@@ -30,7 +30,7 @@
             <tr>
                 <td>
                     <a href="{{ path('lesson_edit', {id:lesson.id}) }}">{{ lesson.title }}</a><br>
-                    <small>Contenus associés :
+                    {% if lesson.contents is empty  %}<small>Pas de contenu associé {% else %} Contenus associés :{% endif %}
                     <ol>
                     {% for content in lesson.contents %}
                             <li>
@@ -41,7 +41,11 @@
 
                 </td>
                 <td>{{ lesson.createdAt|date('d-m-Y') }}</td>
-                <td>{{ lesson.teacher }}</td>
+                <td>
+                  {% for formateur in lesson.formateurs %}
+                    <li><small>{{ formateur.prenom }} {{ formateur.nom }}</small></li>
+                  {% endfor %}
+                </td>
                 <td><a href="{{ path('lesson_edit', {id:lesson.id}) }}">Editer</a></td>
                 <td><a href="{{ path('lesson_delete', {id:lesson.id}) }}">Supprimer</a></td>
             </tr>

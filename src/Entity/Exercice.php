@@ -41,6 +41,12 @@ class Exercice
      */
     private $propositionTrois;
 
+    /**
+     * @ORM\Column(type="json_array")
+     */
+    private $goodAnswers;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,6 +108,18 @@ class Exercice
     public function setPropositionTrois(string $propositionTrois): self
     {
         $this->propositionTrois = $propositionTrois;
+
+        return $this;
+    }
+
+    public function getGoodAnswers()
+    {
+        return $this->goodAnswers;
+    }
+
+    public function setGoodAnswers($goodAnswers): self
+    {
+        $this->goodAnswers = $goodAnswers;
 
         return $this;
     }

@@ -23,6 +23,20 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController
 {
 
+
+    /**
+     * @Route("/dashboard", name="user_dashboard")
+     */
+     public function userDashboard(UserRepository $repo, AdvanceRepository $repoc, LessonContentRepository $repos)
+     {
+       $this->denyAccessUnlessGranted(['ROLE_STAGIAIRE', 'ROLE_ADMIN']);
+       $user = $this->getUser();
+
+       return $this->render('user/user_dashboard.html.twig', [
+           'user'        => $user
+       ]);
+     }
+
     /**
      * @Route("/admin/users/new", name="user_create")
      * @ROUTE("/admin/users/{id}/edit", name="user_edit")
@@ -87,7 +101,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user');
         }
 
-        return $this->render('user/edit.html.twig', [
+        return $this->render('admin/user_edit.html.twig', [
             'formUser' => $form->createView(),
             'editMode'  => $user->getId() !== null,
             'user'        => $user
@@ -102,7 +116,7 @@ class UserController extends AbstractController
     {
         $users = $repo->findAll();
 
-        return $this->render('user/index.html.twig', [
+        return $this->render('admin/user_list.html.twig', [
             'controller_name' => 'SecurityController',
             'users'        => $users
         ]);
@@ -130,17 +144,16 @@ class UserController extends AbstractController
                $progres = $repoad->findBy(array('user' => $user->getId()));
              }
 
-            return $this->render('user/show.html.twig', [
+            return $this->render('admin/user_show.html.twig', [
                 'user' => $user,
                 'contents' => $contents,
                 'progres' => $progres
             ]);
         } else {
-            return $this->render('user/show.html.twig', [
+            return $this->render('admin/user_show.html.twig', [
                 'user' => $user
             ]);
         }
-
     }
 
 

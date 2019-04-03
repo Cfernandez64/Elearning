@@ -7,21 +7,11 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="{{ asset('web/js/froala.js') }}"></script>
+    <script src="{{ asset('web/js/admin.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('web/css/bootstrap.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('web/css/bootstrap-grid.css') }}"/>
     <script src="{{ asset( 'bundles/kmsfroalaeditor/froala_editor_2.9.3/js/froala_editor.min.js') }}"></script>
-    <link rel="stylesheet"
-          href="https://bootswatch.com/4/flatly/bootstrap.min.css">
     {% block stylesheet %}{% endblock %}
-    <style>
-        .wrapper {
-            display: flex;
-            align-items: stretch;
-        }
-
-        #sidebar {
-            min-width: 250px;
-            max-width: 250px;
-        }
-    </style>
 </head>
 <body>
 <div class="bg-primary row justify-content-between align-items-center p-3">
@@ -44,10 +34,11 @@
         <a class="text-white" href="{{ path('lesson') }}">Retour au site</a>
     </div>
 </div>
-<div class="wrapper">
-    <div id="sidebar" class="">
+<div class="wrapper container-fluid p-0">
+  <div class="row justify-content-between">
+    <div id="sidebar" class="col-md-2">
         <div class="list-group">
-                <a class="list-group-item list-group-item-action" href="#">Tableau de bord</a>
+                <a class="list-group-item list-group-item-action" href="{{ path('admin') }}">Tableau de bord</a>
 
                 <a class="list-group-item list-group-item-action" href="{{ path('lesson_admin') }}">Cours</a>
 
@@ -61,10 +52,11 @@
 
         </div>
     </div>
-    <div id="" class="container pt-5 pb-5">
+    <div id="" class="col-md-10 p-md-5">
         {% block body %}{% endblock %}
 
     </div>
+  </div>
 </div>
 </body>
 </html>

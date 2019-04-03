@@ -22,7 +22,7 @@ class LessonType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('description')
+            ->add('description', FroalaEditorType::class, ['attr'=>['id','froala-editor']])
             ->add('duration')
             ->add('contents', EntityType ::class, [
                 'class' => Content::class,
@@ -36,7 +36,6 @@ class LessonType extends AbstractType
               'multiple' => true,
               'by_reference' => false
             ])
-            ->add('teacher')
         ;
     }
 

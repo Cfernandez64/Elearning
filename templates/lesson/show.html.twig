@@ -12,9 +12,9 @@
     {% if progres|length > 0 %}
         {% set total = 0 %}
         {% for prog in progres %}
-
+          {% if prog != null %}
             {% set total = total + prog.percentage %}
-
+          {% endif %}
         {% endfor %}
 
     <p>Progression totale : </p>
@@ -30,7 +30,7 @@
     </strong>
   </p>
   <p>
-    {{ lesson.description }}
+    {{ lesson.description | raw}}
   </p>
     <style>
         .ui-state-highlight { list-style-type:none; height: 3em; line-height: 1.2em; background:#f8f8f8;}
@@ -50,11 +50,13 @@
                 </form>
             </li>
             {% for prog in progres %}
+              {% if prog != null %}
                 {% if rank.content.id == prog.content.id %}
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: {{ prog.percentage }}%;" aria-valuenow="{{ prog.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ prog.percentage }}%</div>
                     </div>
                 {% endif %}
+              {% endif %}
             {% endfor %}
         {% endfor %}
 
@@ -97,7 +99,7 @@
                         forms.each(function(index){
                             var content_id = $('.index-' + index).val();
                             var lesson_id = $('.lesson_id_'+index).val();
-                            $.ajax({
+                            $.ajaxSubmit({
                                 url: "lesson-"+lesson_id+"-"+content_id+"/update-rank",
                                 type: 'POST',
                                 data: {rank: $('.rank-'+index).val(), lesson_id: $('.lesson_id_'+index).val()},

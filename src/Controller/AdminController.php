@@ -24,6 +24,7 @@ use App\Form\UserType;
 use App\Form\LessonType;
 use App\Form\ContentType;
 use App\Form\ExerciceType;
+use App\Form\ExerciceModifyType;
 use App\Form\FormateurType;
 use App\Form\AdvanceType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -106,40 +107,119 @@ class AdminController extends AbstractController
     /**
      * @Route("admin/exercices/new", name="exercice_create")
      **/
-    public function createExo(Exercice $exercice = null, Request $request, ObjectManager $manager, ContentRepository $repo)
+    public function createExo(Exercice $exercice = null, Request $request, ObjectManager $manager, ContentRepository $repo, ExerciceRepository $repos)
     {
         $contents = $repo->findAll();
+        $inExercice = $repos->findAll();
+        $exos = [];
+
+        foreach ($inExercice as $key) {
+          $exos [] = $key->getContenu()->getId();
+        }
+        foreach ($contents as $content)
+        {
+            if(!in_array($content->getId(), $exos))
+            {
+              $contentToAdd [] = $content;
+            }
+        }
+
         if(!$exercice)
         {
             $exercice = new Exercice();
         }
 
         $form = $this->createForm(ExerciceType ::class, $exercice);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $manager->persist($exercice);
-            $manager->flush();
-
-            return $this->redirectToRoute('exercice_admin');
-          }
-
         return $this->render('admin/exercice_create.html.twig', [
             'formExercice' => $form->createView(),
-            'contents' => $contents
+            'contents' => $contentToAdd
         ]);
     }
 
+    /**
+     * @Route("admin/exercices/{id}/edit", name="exercice_edit")
+     **/
+    public function editExo(Content $content, $id, Exercice $exercice = null, Request $request, ObjectManager $manager, ContentRepository $repo, ExerciceRepository $repos)
+    {
 
-        
+        $content = $repo->find($id);
+        $questions = $repos->findBy(['contenu' => $content]);
 
+        foreach($questions as $question)
+        {
+          $form [] = $this->createForm(ExerciceModifyType ::class, $question);
+
+        }
+        return $this->render('admin/exercice_edit.html.twig', [
+            'formExercice' => $form,
+            'content' => $content
+        ]);
+
+    }
+
+    /**
+     * @Route("admin/exercices/insert", name="exercice_insert")
+     **/
+     public function insertExo(Exercice $exercice = null, Request $request, ObjectManager $manager, ContentRepository $repo)
+     {
+       $contenu = $repo->find($_POST['contenu']);
+
+       $exercice = new Exercice();
+       $exercice->setContenu($contenu)
+                ->setQuestion($_POST['question'])
+                ->setPropositionUn($_POST['q1'])
+                ->setPropositionDeux($_POST['q2'])
+                ->setPropositionTrois($_POST['q3'])
+                ->setGoodAnswers($_POST['goodAnswers']);
+
+       $manager->persist($exercice);
+       $manager->flush();
+
+       return $this->redirectToRoute('exercice_admin');
+
+     }
+
+     /**
+      * @Route("admin/exercices/{exo_id}/modify", name="exercice_modify")
+      **/
+      public function modifyExo($exo_id, Request $request, ObjectManager $manager, ContentRepository $repo, ExerciceRepository $repos)
+      {
+        $contenu = $repo->find($_POST['contenu']);
+        $exo = $repos->find($exo_id);
+
+        if(!isset($exo))
+        {
+          $exercice = new Exercice();
+          $exercice->setContenu($contenu)
+                   ->setQuestion($_POST['question'])
+                   ->setPropositionUn($_POST['q1'])
+                   ->setPropositionDeux($_POST['q2'])
+                   ->setPropositionTrois($_POST['q3'])
+                   ->setGoodAnswers($_POST['goodAnswers']);
+          $manager->persist($exercice);
+          $manager->flush();
+
+        } else {
+          $exercice = $repos->find($exo_id);
+          $exercice->setContenu($contenu)
+                   ->setQuestion($_POST['question'])
+                   ->setPropositionUn($_POST['q1'])
+                   ->setPropositionDeux($_POST['q2'])
+                   ->setPropositionTrois($_POST['q3'])
+                   ->setGoodAnswers($_POST['goodAnswers']);
+
+          $manager->persist($exercice);
+          $manager->flush();
+        }
+
+        return $this->redirectToRoute('exercice_admin');
+
+      }
 
     /**
      * @Route("admin/lesson/{id}/edit", name="lesson_edit")
      */
-    public function editLesson(Lesson $lesson = null, LessonContent $lessonContent = null, LessonContentRepository $repo, Request $request, ObjectManager $manager)
+    public function editLesson(User $user = null, AdvanceRepository $adv, Advance $advance = null, Lesson $lesson = null, LessonContent $lessonContent = null, LessonContentRepository $repo, Request $request, ObjectManager $manager)
     {
         if(!$lesson)
         {
@@ -160,9 +240,24 @@ class AdminController extends AbstractController
             $manager->persist($lesson);
             $manager->flush();
 
-
+            //Mise à jour de la table progrès des utilisateurs incrits dans ce cours
             $contents = $form->get('contents')->getData();
+            $usersInThisLesson = $lesson->getUsers();
+            foreach ($usersInThisLesson as $user) {
+              foreach ($contents as $content) {
+                $hasProgres = $adv->findBy(['content' => $content, 'user' => $user]);
+                if (!$hasProgres)
+                {
+                    $advance = new Advance();
+                    $advance->setUser($user);
+                    $advance->setContent($content);
+                    $manager->persist($advance);
+                    $manager->flush();
+                }
+              }
+            }
 
+            //Enregistrement dans la table LessonContent
             $hasLesson = $repo->findBy(array('lesson' => $lesson->getId()));
 
             //ID des enregistrements déjà existants
@@ -224,7 +319,7 @@ class AdminController extends AbstractController
     /**
      * @Route("admin/content/new", name="content_create")
     **/
-    public function createContent(Content $content = null, LessonContent $lessonContent = null, LessonContentRepository $repo, Request $request, ObjectManager $manager)
+    public function createContent(Content $content = null, AdvanceRepository $adv, Advance $advance = null, LessonContent $lessonContent = null, LessonContentRepository $repo, Request $request, ObjectManager $manager)
     {
         if(!$content)
         {
@@ -246,6 +341,22 @@ class AdminController extends AbstractController
             $manager->flush();
 
             $lessons = $form->get('lessons')->getData();
+
+            //Mise à jour de la table progrès des utilisateurs incrits dans les cours associés à ce contenu
+            foreach ($lessons as $lesson) {
+              $usersInThisLesson = $lesson->getUsers();
+              foreach ($usersInThisLesson as $user) {
+                $hasProgres = $adv->findBy(['content' => $content, 'user' => $user]);
+                if (!$hasProgres)
+                {
+                    $advance = new Advance();
+                    $advance->setUser($user);
+                    $advance->setContent($content);
+                    $manager->persist($advance);
+                    $manager->flush();
+                }
+              }
+            }
 
                 //On boucle sur les lessons choisies
                 foreach ($lessons as $lesson)
@@ -292,7 +403,7 @@ class AdminController extends AbstractController
     /**
      * @Route("admin/content/{id}/edit", name="content_edit")
     **/
-    public function editContent(Content $content = null, LessonContent $lessonContent = null, LessonContentRepository $repo, Request $request, ObjectManager $manager)
+    public function editContent(Content $content = null, AdvanceRepository $adv, Advance $advance = null, LessonContent $lessonContent = null, LessonContentRepository $repo, Request $request, ObjectManager $manager)
     {
         if(!$content)
         {
@@ -314,6 +425,24 @@ class AdminController extends AbstractController
             $manager->flush();
 
             $lessons = $form->get('lessons')->getData();
+
+            //Mise à jour de la table progrès des utilisateurs incrits dans les cours associés à ce contenu
+            foreach ($lessons as $lesson) {
+              $usersInThisLesson = $lesson->getUsers();
+              foreach ($usersInThisLesson as $user) {
+                $hasProgres = $adv->findBy(['content' => $content, 'user' => $user]);
+                if (!$hasProgres)
+                {
+                    $advance = new Advance();
+                    $advance->setUser($user);
+                    $advance->setContent($content);
+                    $manager->persist($advance);
+                    $manager->flush();
+                }
+              }
+            }
+
+
             $hasContent = $repo->findBy(array('content' => $content->getId()));
 
             //ID des enregistrements déjà existants
@@ -427,12 +556,27 @@ class AdminController extends AbstractController
     /**
      * @Route("admin/exercices", name="exercice_admin")
     **/
-    public function exercice(ExerciceRepository $repo)
+    public function exercice(ExerciceRepository $repos, ContentRepository $repo)
     {
-      $exos = $repo->findBy(array(), array('contenu' => 'ASC'));
 
+      $contents = $repo->findAll();
+      $inExercice = $repos->findAll();
+
+      $exos = [];
+      $toShow = [];
+
+      foreach ($inExercice as $key) {
+        $exos [] = $key->getContenu()->getId();
+      }
+      foreach ($contents as $content)
+      {
+          if(in_array($content->getId(), $exos))
+          {
+            $toShow [] = $content;
+          }
+      }
       return $this->render('admin/exercice_list.html.twig', [
-      'exos' => $exos
+      'exos' => $toShow
       ]);
     }
 
@@ -449,6 +593,23 @@ class AdminController extends AbstractController
         $manager->flush();
 
         return $this->redirectToRoute('formateur_admin');
+    }
+
+    /**
+     * @Route("admin/exercice/{id}/delete", name="exercice_delete")
+     */
+    public function deleteExercice(ExerciceRepository $repo, $id, ObjectManager $manager)
+    {
+        $exercice = $repo->findBy(['contenu' => $id]);
+        foreach($exercice as $exo)
+        {
+            //Supprimer dans la table content
+            $manager->remove($exo);
+            $manager->flush();
+        }
+
+
+        return $this->redirectToRoute('exercice_admin');
     }
 
     /**

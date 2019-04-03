@@ -6,10 +6,11 @@
   <title>{% block title %}E-learning Bleu Social{% endblock %}</title>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="{{ asset('web/js/froala.js') }}"></script>
-  <script src="{{ asset( 'bundles/kmsfroalaeditor/froala_editor_2.9.3/js/froala_editor.min.js') }}"></script>
-  <link rel="stylesheet"
-  href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+  <script src="{{ asset('web/js/custom.js') }}"></script>
+  <link rel="stylesheet" href="{{ asset('web/css/bootstrap.css') }}"/>
+  <link rel="stylesheet" href="{{ asset('web/css/bootstrap-grid.css') }}"/>
+  <!--<script src="{{ asset( 'bundles/kmsfroalaeditor/froala_editor_2.9.3/js/froala_editor.min.js') }}"></script>-->
+
   {% block stylesheet %}{% endblock %}
 </head>
 <body>
@@ -37,10 +38,12 @@
         </li>
       {% endif %}
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
-      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    <p class="text-white">
+      {% if is_granted(['ROLE_ADMIN', 'ROLE_STAGIAIRE']) %}
+        <small>Vous êtes connecté :</small><br>
+        {{ app.user.firstname }} {{ app.user.lastname }}
+      {% endif %}
+    </p>
   </div>
 </nav>
   <div class="container mt-4">

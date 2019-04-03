@@ -1,0 +1,41 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+
+
+        <div class="row align-items-center justify-content-between border-bottom pb-4">
+            <div class="col-4">
+                <h2>Liste des utilisateurs</h2>
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="col-2 text-md-right text-center">
+                    <a class="btn btn-danger" href="{{ path('user_create')}}">Ajouter un utilisateur</a>
+                </div>
+            {% endif %}
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr class="table-primary">
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <td scope="col">Rôle</td>
+                <td scope="col">Voir</td>
+                <th scope="col">Supprimer</th>
+            </tr>
+            </thead>
+            <tbody>
+              {% for user in users %}
+                  <tr>
+                      <td>{{ user.lastname }}</td>
+                      <td>{{ user.firstname }}</td>
+                      <td>{{ user.roles[0] }}</td>
+                      <td><a class="btn btn-info" href="{{ path('user_show', {id:user.id}) }}">Voir</a></td>
+                      <td>Supprimer</td>
+                  </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+{% endblock %}

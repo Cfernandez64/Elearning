@@ -16,18 +16,12 @@ use KMS\FroalaEditorBundle\Form\Type\FroalaEditorType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class ExerciceType extends AbstractType
+class ExerciceModifyType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('contenu', EntityType ::class, [
-            'class' => Content::class,
-            'choice_label'  => 'title',
-            'multiple'  => false,
-            'disabled' => true,
-            'by_reference' => false
-        ])
+            ->add('id')
             ->add('question')
             ->add('propositionUn')
             ->add('propositionDeux')

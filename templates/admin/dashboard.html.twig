@@ -1,50 +1,11 @@
 {% extends 'admin.html.twig' %}
 
-{% block title %}Liste des cours{% endblock %}
+{% block title %}Tableau de bord{% endblock %}
 
 {% block body %}
 
     <div class="example-wrapper">
-        <div class="row align-items-center justify-content-between border-bottom pb-4">
-            <div class="col-4">
-                <h2>Liste des cours</h2>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-            <div class="col-2 text-md-right text-center">
-                <a class="btn btn-danger" href="{{ path('lesson_create') }}">Ajouter un cours</a>
-            </div>
-            {% endif %}
-        </div>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col">Type</th>
-                <th scope="col">Column heading</th>
-                <th scope="col">Column heading</th>
-                <th scope="col">Column heading</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="table-active">
-                <th scope="row">Active</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-            </tr>
-        <div class="row justify-content-around">
-            {% for lesson in lessons %}
-                <div class="card m-3 col-3" id="cour-{{ lesson.id }}">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ lesson.title }}</h4>
-                        <p class="card-text"><small>Durée du cours : {{ lesson.duration }}</small></p>
-                        <a class="card-link" href="{{ path('lesson_show', {'id':lesson.id}) }}">Lire la suite</a>
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('lesson_edit', {id:lesson.id}) }}" class="card-link">Another link</a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+        <h3>Bienvenue {{ app.user.firstname }} {{ app.user.lastname }}</h3>
 
     </div>
 {% endblock %}

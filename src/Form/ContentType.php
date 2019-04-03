@@ -21,7 +21,9 @@ class ContentType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('slug')
+            ->add('slug', TextType::class,[
+              'required' => false
+            ])
             ->add('lessons', EntityType ::class, [
                 'class' => Lesson::class,
                 'choice_label'  => 'title',

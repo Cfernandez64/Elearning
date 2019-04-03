@@ -12,17 +12,17 @@
 
   {% form_theme formContent 'bootstrap_4_layout.html.twig' %}
 
-  {{ form_start(formContent) }}
+  {{ form_start(formContent, {'attr': {'id' : 'contentCreate'}} ) }}
 
   {{ form_row(formContent.title) }}
-  {{ form_row(formContent.slug) }}
+  {{ form_row(formContent.slug, {'attr': {'placeholder' : 'Ne rien ajouter ici'}}) }}
   {{ form_row(formContent.lessons) }}
   {{ form_row(formContent.content)}}
 
 
 
 
-  <button type="submit" class="btn btn-success" name="button">
+  <button type="submit" class="btn btn-success contentCreate" name="button">
     {% if editMode is defined %}
     Enregistrer
     {% else %}

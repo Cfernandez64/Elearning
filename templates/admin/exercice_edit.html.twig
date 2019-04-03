@@ -1,0 +1,105 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+
+<h1>
+  Modifier le quiz
+</h1>
+<p>Contenu associé : <span>{{ content.title }}</span></p>
+<input id="contenu" type="hidden" value="{{ content.id }}"/>
+<p class="success mt-4"></p>
+
+
+{% for form in formExercice %}
+  {% set form = form.createView %}
+  {% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+  <div id="question-1" class="question border-bottom pb-3 mb-3 mt-3 first">
+    <h4>Question <span class="count-question">1</span></h4>
+    <a class="remover" id="1">Supprimer cette question</a><br>
+    {{ form_start(form, {'attr': {'class' : 'bg-light p-3'}}) }}
+    {{ form_row(form.id) }}
+    {{ form_row(form.question) }}
+    {{ form_row(form.propositionUn, { 'label': 'Proposition valide' }) }}
+    {{ form_row(form.propositionDeux, { 'label': 'Proposition invalide' }) }}
+    {{ form_row(form.propositionTrois, { 'label': 'Proposition invalide' }) }}
+    {{ form_row(form.goodAnswers, { 'label': 'Choisir les bonnes réponses' }) }}
+    {{ form_end(form) }}
+  </div>
+
+{% endfor %}
+
+<div class="row justify-content-between dop">
+  <button class="btn btn-primary add">Ajouter une question</button>
+  <button class="btn btn-success validate">Valider le quiz</button>
+</div>
+
+<p class="success mt-4"></p>
+
+<script>
+$(document).ready(function(){
+  numeroter()
+});
+$('.add').click(function(){
+  var id = $('.dop').prev();
+  var newBlock = $(id).clone();
+  newBlock.find('form input').val('');
+  newBlock.insertBefore('.dop');
+  var choiceContenu = $('#for-contenu').val();
+  $('.exercice_contenu').val(choiceContenu);
+
+  numeroter();
+});
+
+
+function numeroter(){
+  $('.question').each(function(index){
+
+    //Display numéro de la question
+    $(this).find('.count-question').html(index+1);
+
+    //Attribut un id au block
+    $(this).attr('id', 'question-'+(index+1));
+
+    //Attribut un id au delete
+    $(this).find('.remover').attr('id', (index+1));
+
+
+  });
+
+  $('.remover').click(function(event){
+    var blockToRemove = $(this).attr('id');
+    $('#question-'+ blockToRemove).remove();
+  });
+}
+
+//AJAX A CREER
+$('.validate').click(function(){
+  var forms = $('.question form');
+  forms.each(function(index){
+    var id = $('#contenu').val();
+    var exo_id = $(this).find('#exercice_modify_id').val();
+    var route = "{{ path('exercice_modify', { 'exo_id': "PLACEHOLDER" }) }}";
+    var route = route.replace("PLACEHOLDER", exo_id);
+    var question = $(this).find('#exercice_modify_question').val();
+    var q1 = $(this).find('#exercice_modify_propositionUn').val();
+    var q2 = $(this).find('#exercice_modify_propositionDeux').val();
+    var q3 = $(this).find('#exercice_modify_propositionTrois').val();
+    var goodAnswers = $(this).find('#exercice_modify_goodAnswers').val();
+    $.ajax({
+      url: route,
+      type: 'POST',
+      data:{contenu : id, question : question, q1 : q1, q2 : q2, q3 : q3, goodAnswers : goodAnswers},
+      success: function(response){
+        $('.success').html("<span class='badge badge-pill badge-success'>Succès</span> Le quiz a été enregistré");
+      },
+      error : function (response){
+        $('.success').html("<span class='badge badge-pill badge-warning'>Warning</span> Une erreur s'est produite, veuillez réessayer.");
+      }
+    });
+  });
+});
+
+</script>
+
+{% endblock %}

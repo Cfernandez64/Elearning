@@ -19,6 +19,8 @@ class ExerciceRepository extends ServiceEntityRepository
         parent::__construct($registry, Exercice::class);
     }
 
+    
+
     // /**
     //  * @return Exercice[] Returns an array of Exercice objects
     //  */
